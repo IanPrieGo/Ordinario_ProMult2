@@ -22,9 +22,7 @@ public class MAIN {
 		window.add(gameScreen, BorderLayout.CENTER);
 		
 		window.pack();
-		
-		System.out.println(window.getContentPane().getComponentCount());
-		
+				
 		gameScreen.startGameThread();
 		
 	}

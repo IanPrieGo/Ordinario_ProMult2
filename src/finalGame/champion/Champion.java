@@ -49,7 +49,7 @@ public class Champion extends GameObject{
 	int enemyHealth = 100;
 	
 	
-	String resourceFolder = "C:\\Users\\priet\\eclipse-workspace\\Ordinario_Progra2\\src\\finalGame\\champion\\champion_RES";
+	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
 	
 	// Variables sin Utilizar
 	String NAME;
@@ -267,7 +267,7 @@ public class Champion extends GameObject{
 			if (keyHan.highAtk) {
 				enemyHealth -= power * 3;
 			}
-			if (keyHan.highAtk) {
+			if (keyHan.lowAtk) {
 				enemyHealth -= power * 2;
 			}
 			
