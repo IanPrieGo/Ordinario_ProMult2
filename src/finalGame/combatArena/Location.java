@@ -23,8 +23,8 @@ public class Location extends GameObject{
 	
 	boolean key = true;
 	
-	String arena1Path = "C:\\Users\\priet\\eclipse-workspace\\Ordinario_Progra2\\src\\finalGame\\combatarena\\Arena1.png";
-	String arena2Path = "C:\\Users\\priet\\eclipse-workspace\\Ordinario_Progra2\\src\\finalGame\\combatarena\\Arena2.png";
+	String arena1Path = "src\\finalGame\\combatarena\\Arena1.png";
+	String arena2Path = "src\\finalGame\\combatarena\\Arena2.png";
 	
 	public Location(GamePanel gp, KeyHandler keyH) {
 		super(gp, keyH);
