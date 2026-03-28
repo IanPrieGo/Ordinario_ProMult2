@@ -17,13 +17,10 @@ public class Champion extends GameObject{
 
 	int power = 5;
 	int speed = 5;	
-	int scale = 4;
 	int jumpStrength = 0;
 	boolean onFloor = true;
 	
-	
-	boolean isAttacking;
-	
+	int scale = 4;
 	int rawHeight = 700;
 	int rawWidth = 500;
 	
@@ -31,9 +28,8 @@ public class Champion extends GameObject{
 	int width = rawWidth / scale;
 	
 	
-	
 	int x = 50;
-	int y = (int)(floorHeight) - height;
+	int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
 	BufferedImage [] sprites;
@@ -61,6 +57,7 @@ public class Champion extends GameObject{
 	int ultCharge;
 	public int health = 100;
 	boolean isBlocking;
+	boolean isAttacking;
 	
 	
 	public Champion(GamePanel gp, KeyHandler keyH, HitBox hitBoxMask) {
@@ -76,6 +73,14 @@ public class Champion extends GameObject{
 		
 		this.hitBoxMask = enemy.championBox;
 		this.enemy = enemy;
+		
+		getPlayerSprite();
+	}
+	
+	public Champion(GamePanel gp, KeyHandler keyH) {
+		super(gp, keyH);
+		
+//		this.hitBoxMask = enemy.championBox;
 		
 		getPlayerSprite();
 	}
@@ -159,7 +164,7 @@ public class Champion extends GameObject{
 		} 
 
 		if (keyHan.attackKeyPressed && spriteKey) {
-			spriteCounter = 11; 
+			spriteCounter = 12; 
 			spriteKey = false;
 		}
 		
@@ -228,7 +233,10 @@ public class Champion extends GameObject{
 		}
 		
 		y-= jumpStrength;
+		
+		
 		x += ((keyHan.rightPressed ? speed:0) - (keyHan.leftPressed ? speed:0));
+		
 		
 		if (jumpStrength > 0) {
 			

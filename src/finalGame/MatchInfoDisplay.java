@@ -1,5 +1,7 @@
 package finalGame;
 
+import java.awt.Graphics2D;
+
 public class MatchInfoDisplay {
 	
 	String clock;
@@ -18,5 +20,18 @@ public class MatchInfoDisplay {
 	String champPictureP2;
 	String ultimateChargeP2;
 	String specialAttackChargesP2;
+	
+	
+	
+	public void update() {
+		
+	}
+	
+	public void draw(Graphics2D g2) {
+		
+	}
+	
+	
+	
 
 }

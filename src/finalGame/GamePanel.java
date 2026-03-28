@@ -2,9 +2,9 @@ package finalGame;
 
 import java.awt.*;
 import javax.swing.*;
-import finalGame.champion.Champion;
-import finalGame.champion.HitBox;
-import finalGame.combatArena.Location;
+
+import finalGame.champion.*;
+import finalGame.combatArena.*;
 
 public class GamePanel extends JPanel implements Runnable{	
 	
@@ -42,9 +42,12 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//Instancia de la clase "Champion", para que el jugador controle
 	Champion player1 = new Champion(this, keyH, enemy); 
+//	Champion player1 = new Champion(this, keyH); 
 	
 	//Instancia de la clase "Location", que guarda la informacion de la arena de combate
 	Location arena = new Location(this, keyH); 
+	
+	MatchInfoDisplay matchUI = new MatchInfoDisplay(); 
 	
 	
 	//Varibale que guarda la salud del jugador para usarlo en la GUI o para saber cuando este sea derrotado
@@ -156,6 +159,7 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		arena.update();
 		player1.update();
+		matchUI.update();
 		
 	}
 	
@@ -168,12 +172,13 @@ public class GamePanel extends JPanel implements Runnable{
 	
 		arena.draw(g2);
 		player1.draw(g2);
+		matchUI.draw(g2);
 		
 	
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
+      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
 		g2.setColor(enemy.color);
 		g2.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-//		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
 		
 //		g2.fillRect(0, 200, 500, 500);
 		
