@@ -57,9 +57,12 @@ public class Location extends GameObject{
 	
 	public void draw(Graphics2D g2) {
 		
-		Image sprite = backgroundImage.getScaledInstance(width, height, 0);
+		g2.setColor(Color.yellow);
+		g2.fillOval(50, 50, 10, 10);
 		
-		g2.drawImage(sprite, posX, posY, Color.red, null);
+//		Image sprite = backgroundImage.getScaledInstance(width, height, 0);
+//		
+//		g2.drawImage(sprite, 100, 100, Color.red, null);
 		
 	}
 	

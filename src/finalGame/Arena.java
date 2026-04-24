@@ -5,7 +5,7 @@ import finalGame.champion.Champion;
 public class Arena {
 	
 	int timeCounter;
-	int fixArena;
+	int example;
 	
 	Champion player1;
 	Champion player2;

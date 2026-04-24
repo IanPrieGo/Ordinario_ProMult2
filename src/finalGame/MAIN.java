@@ -13,7 +13,7 @@ public class MAIN {
 		window.setResizable(true) ;
 		window.setTitle("School Super Star");
 		window.setLocation(550, 150);
-		window.setVisible (true);
+		
 		window.requestFocus();
 		window.setLayout(new BorderLayout());
 //		window.setFocusable(false); // DONOT COMMENT THIS IN, IT BREAKS EVERYTHING D:>
@@ -24,6 +24,11 @@ public class MAIN {
 		window.pack();
 				
 		gameScreen.startGameThread();
+		
+		window.setVisible (true);
+		
+		
+		
 		
 	}
 	

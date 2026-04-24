@@ -2,11 +2,14 @@ package finalGame;
 
 import java.awt.*;
 import javax.swing.*;
-
 import finalGame.champion.*;
 import finalGame.combatArena.*;
+import gamestates.*;
 
-public class GamePanel extends JPanel implements Runnable{	
+public class GamePanel extends JPanel implements Runnable{
+	
+	public Playing playing = new Playing(this);
+	public GameMenu menu = new GameMenu(this);
 	
 	//Niputidea quesesto
 	private static final long serialVersionUID = 1L;
@@ -21,8 +24,8 @@ public class GamePanel extends JPanel implements Runnable{
 
 	
 	//Define el ancho y alto final de la ventana, basado en la escala y el tamaño.
-	final int screenWidth = (int) (size * scale * 1.5); // En el ancho multiplicamos por 1.5
-	final int screenHeight = (int) (size * scale);      // para que la ventana tenga proporcion de 1:1.5
+	public final int screenWidth = (int) (size * scale * 1.5); // En el ancho multiplicamos por 1.5
+	public final int screenHeight = (int) (size * scale);      // para que la ventana tenga proporcion de 1:1.5
 	
 	//FPS
 	int FPS = 24; //Frame rate al que se dibujara el juego en la pantalla
@@ -31,28 +34,14 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	
+	
+	
 	//Este objeto maneja los inputs del jugador
-	KeyHandler keyH = new KeyHandler(); 
+	public KeyHandler keyH = new KeyHandler(); 
 	
 	//La neta no me acuerdo bien que hace esto, me toca investigarlo bien, pero venia en el tutorial asi que lo inclui
 	Thread gameThread; 
 	
-	//Hitbox del enemy para probar el sistema de colisiones
-	HitBox enemy = new HitBox(400, 400-250, 250, 100, Color.pink, HitBox.enemy); 
-	
-	//Instancia de la clase "Champion", para que el jugador controle
-	Champion player1 = new Champion(this, keyH, enemy); 
-//	Champion player1 = new Champion(this, keyH); 
-	
-	//Instancia de la clase "Location", que guarda la informacion de la arena de combate
-	Location arena = new Location(this, keyH); 
-	
-	MatchInfoDisplay matchUI = new MatchInfoDisplay(); 
-	
-	
-	//Varibale que guarda la salud del jugador para usarlo en la GUI o para saber cuando este sea derrotado
-	int healthPlayer1 = player1.health; 
-
 	
 	
 	
@@ -82,27 +71,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//	+Permite al panel utilizar la instancia "keyH" de la clase "KehHandler" para registrar los Inputs del usuario
 	this.addKeyListener(keyH);
-	
-	
-	
-	
-	
-	//Crea un panel para representar una barra de vida, aunque ahora no funciona, puede que haya un problema 
-	// de compatibilidad al integrar JPanels y PaintComponent, hay que checar eso
-	JPanel healthBar = new JPanel();
-	healthBar.setPreferredSize(new Dimension(500,500));
-	healthBar.setLocation(0, 0);
-	healthBar.setBackground(Color.yellow);
-	this.add(healthBar);
-	
-	
-	//Misma situacion que el JPanel "healthBar", pero pruebo el metodo setBounds()
-	//en vez de setPreferredSize() y setLocation; pero sigue sin funcionar
-	JPanel panel_1 = new JPanel();
-	panel_1.setBounds(10, 10, 230, 37);
-	panel_1.setBackground(Color.black);
-	this.add(panel_1);
-	
+
 	
 	}
 	
@@ -125,7 +94,6 @@ public class GamePanel extends JPanel implements Runnable{
 		long lastTime = System.nanoTime();
 		long currentTime;
 		
-		System.out.println("running");
 		while(gameThread != null) {
 			
 			currentTime = System.nanoTime();
@@ -158,9 +126,20 @@ public class GamePanel extends JPanel implements Runnable{
 	//Metodo que actualiza la informacion de posiciones, velocidad, estados, etc...
 	public void update() {
 		
-		arena.update();
-		player1.update();
-		matchUI.update();
+		//Pablo AQUI espero no explote
+		switch(Gamestate.state) {
+		case MENU:
+			menu.update();
+			break;
+		case PLAYING:
+			playing.update(); 
+			break;
+		case PAUSE:
+			break;
+		default:
+			break;
+		
+		}
 		
 	}
 	
@@ -170,20 +149,24 @@ public class GamePanel extends JPanel implements Runnable{
 		super.paintComponent(g);
 		
 		Graphics2D g2 = (Graphics2D)g;
-	
-		arena.draw(g2);
-		player1.draw(g2);
-		matchUI.draw(g2);
+		
+		//PABLO HERE	
+		switch(Gamestate.state) {
+		case MENU:
+			menu.draw(g2);
+			break;
+		case PLAYING:
+			playing.draw(g2);
+			break;
+		case PAUSE:
+			break;
+		default:
+			break;
+		
+		}
 		
 	
-      g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
-		g2.setColor(enemy.color);
-		g2.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
-		
-//		g2.fillRect(0, 200, 500, 500);
-		
-		g2.dispose();
+
 		
 	}
 
