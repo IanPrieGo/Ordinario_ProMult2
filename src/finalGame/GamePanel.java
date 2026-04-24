@@ -125,6 +125,7 @@ public class GamePanel extends JPanel implements Runnable{
 		long lastTime = System.nanoTime();
 		long currentTime;
 		
+		System.out.println("running");
 		while(gameThread != null) {
 			
 			currentTime = System.nanoTime();
