@@ -14,6 +14,8 @@ public class KeyHandler implements KeyListener, MouseListener{
 	public String pressed = "key pressed :D";
 	public String released = "key released :D";
 	
+	public GamePanel gp;
+	
 	
 	
 	public boolean upPressed = false;
@@ -30,6 +32,12 @@ public class KeyHandler implements KeyListener, MouseListener{
 	
 	public boolean test = true;
 	
+	public KeyHandler(GamePanel gp) {
+		this.gp = gp;
+		
+	}
+	
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -38,7 +46,18 @@ public class KeyHandler implements KeyListener, MouseListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		switch (Gamestate.state) {
+		case MENU:
+			break;
+		case PAUSE:
+			break;
+		case PLAYING:
+			this.gp.playing.keyPressed(e);
+			break;
+		default:
+			break;
 		
+		}
 
 		
 	}
@@ -51,6 +70,7 @@ public class KeyHandler implements KeyListener, MouseListener{
 		case PAUSE:
 			break;
 		case PLAYING:
+			this.gp.playing.keyReleased(e);
 			break;
 		default:
 			break;

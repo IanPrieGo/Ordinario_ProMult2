@@ -23,14 +23,13 @@ public class Playing extends State implements Statemethot{
 	
 	public Playing(GamePanel game) {
 		super(game);
-	}
-	
-	public void intClasses() {
+		
 		//Hitbox del enemy para probar el sistema de colisiones
 		enemy = new HitBox(400, 400-250, 250, 100, Color.pink, HitBox.enemy); 
 		
 		//Instancia de la clase "Champion", para que el jugador controle
 		player1 = new Champion(game, game.keyH, enemy); 
+		System.out.println(game.keyH);
 //		Champion player1 = new Champion(this, keyH); 
 		
 		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
@@ -43,20 +42,20 @@ public class Playing extends State implements Statemethot{
 		//Varibale que guarda la salud del jugador para usarlo en la GUI o para saber cuando este sea derrotado
 		int healthPlayer1 = player1.health;
 		
-		
 	}
+	
 	
 		@Override
 		public void update() {
 			
 			if(startKey) {
-				this.onStart();
+//				this.intClasses();
 				startKey = false;
 			}
 			
 			
-//			arena.update();
-//			player1.update();
+			arena.update();
+			player1.update();
 			
 		}
 
@@ -66,8 +65,9 @@ public class Playing extends State implements Statemethot{
 			g2.setColor(Color.RED);
 			g2.fillOval(game.screenWidth/2, game.screenHeight/2, 10, 10);
 			arena.draw(g2);
-//			player1.draw(g2);
-//			
+			player1.draw(g2);
+
+			
 //		    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
 //			g2.setColor(enemy.color);
 //			g2.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
@@ -213,7 +213,7 @@ public class Playing extends State implements Statemethot{
 
 		@Override
 		public void onStart() {
-			this.intClasses();
+//			this.intClasses();
 			
 		}
 		

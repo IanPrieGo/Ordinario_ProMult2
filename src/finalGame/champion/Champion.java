@@ -77,8 +77,10 @@ public class Champion extends GameObject{
 		getPlayerSprite();
 	}
 	
-	public Champion(GamePanel gp, KeyHandler keyH) {
-		super(gp, keyH);
+	public Champion(GamePanel gps, KeyHandler keyHs) {
+		super(gps, keyHs);
+		
+		System.out.println(this.keyHan);
 		
 //		this.hitBoxMask = enemy.championBox;
 		

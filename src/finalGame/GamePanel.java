@@ -2,18 +2,14 @@ package finalGame;
 
 import java.awt.*;
 import javax.swing.*;
-import finalGame.champion.*;
-import finalGame.combatArena.*;
 import gamestates.*;
 
 public class GamePanel extends JPanel implements Runnable{
 	
-	public Playing playing = new Playing(this);
-	public GameMenu menu = new GameMenu(this);
+
 	
 	//Niputidea quesesto
 	private static final long serialVersionUID = 1L;
-	
 	
 	
 	//Escala deseada para el tamaño de la venta
@@ -34,14 +30,16 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	
-	
-	
 	//Este objeto maneja los inputs del jugador
-	public KeyHandler keyH = new KeyHandler(); 
+	public KeyHandler keyH = new KeyHandler(this); 
 	
 	//La neta no me acuerdo bien que hace esto, me toca investigarlo bien, pero venia en el tutorial asi que lo inclui
 	Thread gameThread; 
 	
+	
+	
+	public Playing playing = new Playing(this);
+	public GameMenu menu = new GameMenu(this);
 	
 	
 	
