@@ -48,11 +48,12 @@ public class KeyHandler implements KeyListener, MouseListener{
 	public void keyPressed(KeyEvent e) {
 		switch (Gamestate.state) {
 		case MENU:
+			gp.menu.keyPressed(e);
 			break;
 		case PAUSE:
 			break;
 		case PLAYING:
-			this.gp.playing.keyPressed(e);
+			gp.playing.keyPressed(e);
 			break;
 		default:
 			break;
@@ -66,11 +67,12 @@ public class KeyHandler implements KeyListener, MouseListener{
 	public void keyReleased(KeyEvent e) {
 		switch (Gamestate.state) {
 		case MENU:
+			gp.menu.keyReleased(e);
 			break;
 		case PAUSE:
 			break;
 		case PLAYING:
-			this.gp.playing.keyReleased(e);
+			gp.playing.keyReleased(e);
 			break;
 		default:
 			break;
