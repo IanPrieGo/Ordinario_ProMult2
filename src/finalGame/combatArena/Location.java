@@ -59,7 +59,7 @@ public class Location extends GameObject{
 		
 		Image sprite = backgroundImage.getScaledInstance(width, height, 0);
 		
-		g2.drawImage(sprite, posX, posY, Color.red, null);
+		g2.drawImage(sprite, 0, 0, Color.red, null);
 		
 	}
 	
