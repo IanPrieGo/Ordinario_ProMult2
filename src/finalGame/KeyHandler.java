@@ -52,6 +52,9 @@ public class KeyHandler implements KeyListener, MouseListener{
 		case PLAYING:
 			gp.playing.keyPressed(e);
 			break;
+		case AI_TESTING:
+			gp.aiTesting.keyPressed(e);
+			break;
 		default:
 			break;
 		
@@ -70,6 +73,9 @@ public class KeyHandler implements KeyListener, MouseListener{
 			break;
 		case PLAYING:
 			gp.playing.keyReleased(e);
+			break;
+		case AI_TESTING:
+			gp.aiTesting.keyReleased(e);
 			break;
 		default:
 			break;

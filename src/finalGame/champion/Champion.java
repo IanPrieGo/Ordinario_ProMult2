@@ -39,9 +39,11 @@ public class Champion extends GameObject{
 	HitBox currentHitbox = new HitBox();
 	
 	HitBox hitBoxMask;
-	Champion enemy;
+	EnemyChampion enemy;
 	
 	int enemyHealth = 100;
+	
+	boolean isAttacking;
 	
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
@@ -56,7 +58,7 @@ public class Champion extends GameObject{
 	int ultCharge;
 	public int health = 100;
 	boolean isBlocking;
-	boolean isAttacking;
+	
 	
 	
 	public Champion(GamePanel gp, KeyHandler keyH, HitBox hitBoxMask) {
@@ -67,7 +69,7 @@ public class Champion extends GameObject{
 		getPlayerSprite();
 	}
 	
-	public Champion(GamePanel gp, KeyHandler keyH, Champion enemy) {
+	public Champion(GamePanel gp, KeyHandler keyH, EnemyChampion enemy) {
 		super(gp, keyH);
 		
 		this.hitBoxMask = enemy.championBox;
@@ -122,6 +124,13 @@ public class Champion extends GameObject{
 				System.out.println("Error on Sprite [" + i + "]");
 			}
 		}
+	}
+	
+	public void setEnemy(EnemyChampion champion) {
+		
+		this.enemy = champion;
+		this.hitBoxMask = champion.championBox;
+		
 	}
 	
 	public void update() {

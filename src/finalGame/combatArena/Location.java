@@ -21,6 +21,9 @@ public class Location extends GameObject{
 	int height = 500;
 	int width = 0;
 	
+	int player1StartingX = 50;
+	int player2StartingX = 100;
+	
 	boolean key = true;
 	
 	String arena1Path = "src\\finalGame\\combatarena\\Arena1.png";
