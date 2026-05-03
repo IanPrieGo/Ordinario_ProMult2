@@ -68,13 +68,7 @@ public class Playing extends State implements Statemethot{
 			player1.draw(g2);
 
 			
-//		    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
-//			g2.setColor(enemy.color);
-//			g2.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-//			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC));
-////			g2.fillRect(0, 200, 500, 500);
-//			g2.dispose();
-//			
+			
 		}
 
 

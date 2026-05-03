@@ -27,7 +27,7 @@ public class Champion extends GameObject{
 	int width = rawWidth / scale;
 	
 	
-	int x = 50;
+	public int x = 50;
 	int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
@@ -72,7 +72,7 @@ public class Champion extends GameObject{
 	public Champion(GamePanel gp, KeyHandler keyH, EnemyChampion enemy) {
 		super(gp, keyH);
 		
-		this.hitBoxMask = enemy.championBox;
+		this.hitBoxMask = enemy.hurtBox;
 		this.enemy = enemy;
 		
 		getPlayerSprite();
@@ -129,7 +129,7 @@ public class Champion extends GameObject{
 	public void setEnemy(EnemyChampion champion) {
 		
 		this.enemy = champion;
-		this.hitBoxMask = champion.championBox;
+		this.hitBoxMask = champion.hurtBox;
 		
 	}
 	
@@ -152,18 +152,24 @@ public class Champion extends GameObject{
 		
 		
 		
-		g2.drawImage(currentSprite, x, y, Color.red, null);
-		g2.setPaint(new Color(0, 72, 255));
+		g2.drawImage(currentSprite, x, y, null);
+		
         AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
         g2.setComposite(alcom);
+        
+        g2.setPaint(new Color(0, 72, 255));
 		g2.fillRect(championBox.x, championBox.y, championBox.width, championBox.height);
-		g2.setColor(currentHitbox.color);
+		
+		g2.setPaint(Color.red);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
 		
 		g2.setColor(Color.black);
 		g2.drawRect(10, 50, 300, 25);
 		g2.setColor(Color.red);
 		g2.fillRect(10, 50, enemyHealth * 3, 25);
+		
+		
+//		g2.dispose();
 		
 	}
 	

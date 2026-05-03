@@ -21,8 +21,7 @@ public class Location extends GameObject{
 	int height = 500;
 	int width = 0;
 	
-	int player1StartingX = 50;
-	int player2StartingX = 100;
+
 	
 	boolean key = true;
 	
@@ -63,6 +62,8 @@ public class Location extends GameObject{
 		Image sprite = backgroundImage.getScaledInstance(width, height, 0);
 		
 		g2.drawImage(sprite, 0, 0, Color.red, null);
+		
+//		g2.dispose();
 		
 	}
 	

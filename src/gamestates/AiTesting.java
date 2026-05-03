@@ -12,6 +12,9 @@ public class AiTesting extends State implements Statemethot{
 	EnemyChampion enemy;
 	Location arena;
 	
+	int player1StartingX = 50;
+	int player2StartingX = 500;
+	
 	 public AiTesting(GamePanel game) {
 		super(game);
 		
@@ -20,6 +23,9 @@ public class AiTesting extends State implements Statemethot{
 		
 		enemy.setEnemy(player);
 		player.setEnemy(enemy);
+		
+		enemy.x = this.player2StartingX;
+		player.x = this.player1StartingX;
 		
 		
 		arena = new Location(game, game.keyH); 
@@ -40,6 +46,8 @@ public class AiTesting extends State implements Statemethot{
 		 	arena.draw(g2);
 			player.draw(g2);
 			enemy.draw(g2);
+			
+			g2.dispose();
 			
 	 }
 

@@ -27,7 +27,7 @@ public class EnemyChampion extends GameObject{
 	int width = rawWidth / scale;
 	
 	
-	int x = 50;
+	public int x = 50;
 	int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
@@ -35,7 +35,7 @@ public class EnemyChampion extends GameObject{
 	int spriteCounter = 0;
 	boolean spriteKey = true;
 	
-	HitBox championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+	HitBox hurtBox = new HitBox();
 	HitBox currentHitbox = new HitBox();
 	
 	HitBox hitBoxMask;
@@ -48,11 +48,29 @@ public class EnemyChampion extends GameObject{
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
 	
+	
+	//ENEMY STATTE MACHINE
+	enum STATE {
+		IDLE,
+		PURSUE,
+		ATTACK,
+	}
+	
+	STATE currentState = STATE.PURSUE;
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public EnemyChampion(GamePanel gp, KeyHandler keyH) {
 		super(gp, keyH);
 		
 		getChampionSprite();
+		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
 		
 	}
 	
@@ -63,6 +81,8 @@ public class EnemyChampion extends GameObject{
 		this.enemy = enemy;
 		
 		getChampionSprite();
+		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	public void getChampionSprite() {
@@ -82,7 +102,7 @@ public class EnemyChampion extends GameObject{
 				resourceFolder + "\\DumSprites_AtaqueBasico_Normal.png",
 				// Ataque Bajo Salto [6]
 				resourceFolder + "\\DumSprites_AtaqueBajo_Salto.png",
-				// Ataque Bajo Normal [7]
+				// Ataque Bajo Normal [7]	
 				resourceFolder + "\\DumSprites_AtaqueBajo_Normal.png",
 				// Arnold [8]
 				resourceFolder + "\\ArnoldGuapo.png"
@@ -123,20 +143,27 @@ public class EnemyChampion extends GameObject{
 	public void draw(Graphics2D g2) {
 		AlphaComposite alcom;
 		
-//		currentSprite = sprites[1].getScaledInstance(width, height, 0);
-		
-		
+
+		//DrawSprite
 		alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
 		g2.setComposite(alcom);
-		g2.drawImage(currentSprite, x, y, Color.red, null);
+		g2.drawImage(currentSprite, x, y, null);
+		
+		
+		//Draw character HurtBox
+		g2.setPaint(Color.yellow);
+        alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
+        g2.setComposite(alcom);
+		g2.fillRect(hurtBox.x, hurtBox.y, hurtBox.width, hurtBox.height);
+	
 		
 		g2.setPaint(new Color(0, 72, 255));
         alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
         g2.setComposite(alcom);
-		g2.setColor(currentHitbox.color);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
-
 		
+		
+
 	}
 		
 	
@@ -199,6 +226,33 @@ public class EnemyChampion extends GameObject{
 	}
 
 	void movementManager() {
+		float  distToOponent;
+		distToOponent = Math.abs(this.x - enemy.x);
+		
+		if (enemy != null) {
+			
+			switch (currentState){
+			case IDLE:
+				if (distToOponent > (float)(this.width * 1.5)) {
+					currentState = STATE.PURSUE;
+				}
+				break;
+			case PURSUE:
+				if (distToOponent < (float)(this.width * 1.5)) {
+					currentState = STATE.IDLE;
+				}
+				
+				int movementFactor = this.signOf(enemy.x - this.x) * speed;
+				this.x += movementFactor;
+					
+				
+				break;
+			default:
+				break;
+				
+			}
+			
+		}
 		//MOVMENT MANAGER
 //		if (y < (floorHeight - height)) {
 //			
@@ -234,7 +288,9 @@ public class EnemyChampion extends GameObject{
 	
 	void actionManager() {
 		
-//		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+//		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+		hurtBox.x = x + 7;
+		hurtBox.y = y + 10;
 //		
 //		if (keyHan.basicAtk && spriteCounter > 9) {
 //			currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
@@ -266,6 +322,14 @@ public class EnemyChampion extends GameObject{
 //		}	
 		
 	}
+	
+	private int signOf(float num) {
+		  int operation;
+//		  operation = (int) (( ((num)/(num*(-1)))*(-num) )/(Math.abs(num))); 
+		  operation = (int) (num/(Math.abs(num))); 
+
+		  return operation;
+		}
 
 
 
