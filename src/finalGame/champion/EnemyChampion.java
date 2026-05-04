@@ -41,9 +41,11 @@ public class EnemyChampion extends GameObject{
 	HitBox hitBoxMask;
 	Champion enemy;
 	
-	int enemyHealth = 100;
+	int health = 100;
 	
 	boolean isAttacking;
+	int attackCounter = 0;
+	int attackAnticipation = 50;
 	
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
@@ -53,15 +55,22 @@ public class EnemyChampion extends GameObject{
 	enum STATE {
 		IDLE,
 		PURSUE,
+		RETREAT,
 		ATTACK,
 	}
 	
-	STATE currentState = STATE.PURSUE;
+	STATE currentState = STATE.IDLE;
 	
 	
-	
-	
-	
+	final static int IDLE_SALTO = 0;
+	final static int IDLE_NORMAL = 1;
+	final static int ATAQUEALTO_SALTO = 2;
+	final static int ATAQUEALTO_NORMAL = 3;
+	final static int ATAQUEBASICO_SALTO = 4;
+	final static int ATAQUEBASICO_NORMAL = 5;
+	final static int ATAQUEBAJO_SALTO = 6;
+	final static int ATAQUEBAJO_NORMAL = 7;
+	final static int ARNOLD_GUAPO = 8;
 	
 	
 	
@@ -134,9 +143,14 @@ public class EnemyChampion extends GameObject{
 	
 	public void update() {
 		
+		if (y < (floorHeight - height)) {
+			onFloor = false;
+		} else {
+			onFloor = true;
+		}
+		
 		movementManager();
-		actionManager();
-		spriteManager();
+
 		
 	}
 	
@@ -169,59 +183,6 @@ public class EnemyChampion extends GameObject{
 	
 	void spriteManager() {
 		
-//		if (spriteCounter > 0) {
-//			spriteCounter -=2;
-//		} 
-//
-//		if (keyHan.attackKeyPressed && spriteKey) {
-//			spriteCounter = 12; 
-//			spriteKey = false;
-//		}
-//		
-//		if (!keyHan.attackKeyPressed) {
-//			spriteKey = true;
-//		}
-//		
-		if (onFloor) {
-			currentSprite = sprites[1].getScaledInstance(width, height, 0);
-			
-//			if (spriteCounter > 0) {
-//				if(keyHan.highAtk) { //ACTION EXECUTIONER
-//					currentSprite = sprites[3].getScaledInstance(width, height, 0);
-//				}
-//				if(keyHan.basicAtk) {
-//					currentSprite = sprites[5].getScaledInstance(width, height, 0);
-//				}
-//				if(keyHan.lowAtk) {
-//					currentSprite = sprites[7].getScaledInstance(width, height, 0);
-//				}
-//				isAttacking = true;
-//			}
-//			if(keyHan.longAtk) {
-//				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-//			}
-			
-		} else {
-			currentSprite = sprites[0].getScaledInstance(width, height, 0);
-			
-//			if (spriteCounter > 0) {
-//				if(keyHan.highAtk) { //ACTION EXECUTIONER
-//					currentSprite = sprites[2].getScaledInstance(width, height, 0);
-//				}
-//				if(keyHan.basicAtk) {
-//					currentSprite = sprites[4].getScaledInstance(width, height, 0);
-//				}
-//				if(keyHan.lowAtk) {
-//					currentSprite = sprites[6].getScaledInstance(width, height, 0);
-//				}
-//				isAttacking = true;
-//			}
-//			if(keyHan.longAtk) {
-//				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-//			}
-		}
-
-
 		
 	}
 
@@ -229,68 +190,81 @@ public class EnemyChampion extends GameObject{
 		float  distToOponent;
 		distToOponent = Math.abs(this.x - enemy.x);
 		
+		float desiredDist;
+		desiredDist = (float)(this.width * 1.5);
+		
+		int movementFactor;
+		
+		hurtBox.x = x + 7;
+		hurtBox.y = y + 10;
+		
+		if (onFloor) {
+			currentSprite = sprites[EnemyChampion.IDLE_NORMAL].getScaledInstance(width, height, 0);
+		} else {
+			currentSprite = sprites[EnemyChampion.IDLE_SALTO].getScaledInstance(width, height, 0);
+		}
+		
 		if (enemy != null) {
 			
 			switch (currentState){
 			case IDLE:
-				if (distToOponent > (float)(this.width * 1.5)) {
-					currentState = STATE.PURSUE;
-				}
+					if (health > 50) {
+						if (distToOponent > desiredDist) {
+							currentState = STATE.PURSUE;
+						}
+					} else {
+						if (distToOponent < desiredDist) {
+							currentState = STATE.RETREAT;
+						}
+					}
+					
+					
+					if (distToOponent < (float)(this.width)) {
+						currentState = STATE.ATTACK;
+					}
+				
+				
 				break;
 			case PURSUE:
-				if (distToOponent < (float)(this.width * 1.5)) {
-					currentState = STATE.IDLE;
-				}
-				
-				int movementFactor = this.signOf(enemy.x - this.x) * speed;
-				this.x += movementFactor;
+					if (distToOponent < desiredDist) {
+						currentState = STATE.IDLE;	
+					}
 					
+					movementFactor = this.signOf(enemy.x - this.x) * speed;
+					this.x += movementFactor;
+					
+				break;
+			case RETREAT:
 				
+					if (distToOponent > desiredDist) {
+						currentState = STATE.IDLE;
+					}
+					
+					movementFactor = this.signOf(enemy.x - this.x) * speed;
+					this.x -= movementFactor;
+				
+				break;
+			case ATTACK:
+				
+				this.normalAttack();
+				currentState = STATE.RETREAT;
+					
 				break;
 			default:
 				break;
 				
 			}
 			
+			
+			
 		}
-		//MOVMENT MANAGER
-//		if (y < (floorHeight - height)) {
-//			
-//			y += 10;
-//			onFloor = false;
-//			
-//		} else {
-//			
-//			onFloor = true;
-//		}		
-//		
-//		
-//		if (keyHan.upPressed && onFloor) {
-//			
-//			jumpStrength = 25;
-//		}
-//		
-//		y-= jumpStrength;
-//		
-//		
-//		x += ((keyHan.rightPressed ? speed:0) - (keyHan.leftPressed ? speed:0));
-//		
-//		
-//		if (jumpStrength > 0) {
-//			
-//			jumpStrength -= 2;
-//			
-//		} else if (jumpStrength < 0) {
-//			
-//			jumpStrength = 0;
-//		}
+
 	}
 	
 	void actionManager() {
 		
 //		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
-		hurtBox.x = x + 7;
-		hurtBox.y = y + 10;
+		
 //		
 //		if (keyHan.basicAtk && spriteCounter > 9) {
 //			currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
@@ -325,11 +299,20 @@ public class EnemyChampion extends GameObject{
 	
 	private int signOf(float num) {
 		  int operation;
-//		  operation = (int) (( ((num)/(num*(-1)))*(-num) )/(Math.abs(num))); 
 		  operation = (int) (num/(Math.abs(num))); 
 
 		  return operation;
 		}
+	
+	void normalAttack() {
+		if (onFloor) {
+			currentSprite = sprites[EnemyChampion.ATAQUEBASICO_NORMAL].getScaledInstance(width, height, 0);
+		} else {
+			currentSprite = sprites[EnemyChampion.ATAQUEBASICO_SALTO].getScaledInstance(width, height, 0);
+		}
+		
+
+	}
 
 
 
