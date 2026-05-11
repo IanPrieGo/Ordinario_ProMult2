@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -39,7 +41,11 @@ public class EnemyChampion extends GameObject{
 	HitBox currentHitbox = new HitBox();
 	
 	HitBox hitBoxMask;
-	Champion enemy;
+	Champion player;
+	int stillnesCounter = 0;
+	int playerCurrentXpos;
+	int playerPreviousXPos;
+	
 	
 	int health = 100;
 	
@@ -50,8 +56,27 @@ public class EnemyChampion extends GameObject{
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
 	
+	float  distToOponent;
+	float desiredDist;
+	int movementFactor;
 	
-	//ENEMY STATTE MACHINE
+	
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
+
+
+
+	
+	
+	//ENEMY STATE MACHINE
 	enum STATE {
 		IDLE,
 		PURSUE,
@@ -60,6 +85,15 @@ public class EnemyChampion extends GameObject{
 	}
 	
 	STATE currentState = STATE.IDLE;
+	
+	enum PLAYER_STATE {
+		IDLE, 
+		APROCHING,
+		ATTACKING,
+		RETREATING,
+	}
+	
+	PLAYER_STATE currentPlayerState = PLAYER_STATE.IDLE;
 	
 	
 	final static int IDLE_SALTO = 0;
@@ -83,11 +117,12 @@ public class EnemyChampion extends GameObject{
 		
 	}
 	
-	public EnemyChampion(GamePanel gp, KeyHandler keyH, Champion enemy) {
+	public EnemyChampion(GamePanel gp, KeyHandler keyH, Champion player) {
 		super(gp, keyH);
 		
-		this.hitBoxMask = enemy.championBox;
-		this.enemy = enemy;
+		this.hitBoxMask = player.championBox;
+		this.player = player;
+		this.playerPreviousXPos = player.x;
 		
 		getChampionSprite();
 		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
@@ -135,13 +170,16 @@ public class EnemyChampion extends GameObject{
 	
 	public void setEnemy(Champion champion) {
 		
-		this.enemy = champion;
+		this.player = champion;
 		this.hitBoxMask = champion.championBox;
 		
 	}
 	
 	
 	public void update() {
+		
+		checkPlayerState();
+		System.out.println(currentPlayerState);
 		
 		if (y < (floorHeight - height)) {
 			onFloor = false;
@@ -187,13 +225,10 @@ public class EnemyChampion extends GameObject{
 	}
 
 	void movementManager() {
-		float  distToOponent;
-		distToOponent = Math.abs(this.x - enemy.x);
 		
-		float desiredDist;
+		distToOponent = Math.abs(this.x - player.x);
 		desiredDist = (float)(this.width * 1.5);
 		
-		int movementFactor;
 		
 		hurtBox.x = x + 7;
 		hurtBox.y = y + 10;
@@ -204,60 +239,9 @@ public class EnemyChampion extends GameObject{
 			currentSprite = sprites[EnemyChampion.IDLE_SALTO].getScaledInstance(width, height, 0);
 		}
 		
-		if (enemy != null) {
-			
-			switch (currentState){
-			case IDLE:
-					if (health > 50) {
-						if (distToOponent > desiredDist) {
-							currentState = STATE.PURSUE;
-						}
-					} else {
-						if (distToOponent < desiredDist) {
-							currentState = STATE.RETREAT;
-						}
-					}
-					
-					
-					if (distToOponent < (float)(this.width)) {
-						currentState = STATE.ATTACK;
-					}
-				
-				
-				break;
-			case PURSUE:
-					if (distToOponent < desiredDist) {
-						currentState = STATE.IDLE;	
-					}
-					
-					movementFactor = this.signOf(enemy.x - this.x) * speed;
-					this.x += movementFactor;
-					
-				break;
-			case RETREAT:
-				
-					if (distToOponent > desiredDist) {
-						currentState = STATE.IDLE;
-					}
-					
-					movementFactor = this.signOf(enemy.x - this.x) * speed;
-					this.x -= movementFactor;
-				
-				break;
-			case ATTACK:
-				
-				this.normalAttack();
-				currentState = STATE.RETREAT;
-					
-				break;
-			default:
-				break;
-				
-			}
-			
-			
-			
-		}
+		this.behavior1();
+		
+
 
 	}
 	
@@ -297,6 +281,103 @@ public class EnemyChampion extends GameObject{
 		
 	}
 	
+	void behavior1() {
+		
+		if (player != null) {
+			
+			switch (currentState){
+			case IDLE:
+					if (health > 50) {
+						if (distToOponent > desiredDist) {
+							currentState = STATE.PURSUE;
+						}
+					} else {
+						if (distToOponent < desiredDist) {
+							currentState = STATE.RETREAT;
+						}
+					}
+					
+					
+					if (distToOponent < (float)(this.width)) {
+						currentState = STATE.ATTACK;
+					}
+				
+				
+				break;
+			case PURSUE:
+					if (distToOponent < desiredDist) {
+						currentState = STATE.IDLE;	
+					}
+					
+					movementFactor = this.signOf(player.x - this.x) * speed;
+					this.x += movementFactor;
+					
+				break;
+			case RETREAT:
+				
+					if (distToOponent > desiredDist) {
+						currentState = STATE.IDLE;
+					}
+					
+					movementFactor = this.signOf(player.x - this.x) * speed;
+					this.x -= movementFactor;
+				
+				break;
+			case ATTACK:
+				
+				this.normalAttack();
+				currentState = STATE.RETREAT;
+					
+				break;
+			default:
+				break;
+				
+			}
+			
+			
+			
+		}
+		
+	}
+	
+	enum STATES_2 {
+		EN_GARDE,
+		ATTACK,
+		RETREAT,
+		RECOVERING;
+		
+	}
+	
+	STATES_2 currentState_2 = STATES_2.EN_GARDE;
+	
+	
+	void behavior2() {
+		
+		int direction = 1;
+		
+		switch(currentState_2) {
+		case EN_GARDE:
+			
+			if (stillnesCounter > 50) {
+				currentState_2 = STATES_2.ATTACK;
+			}
+			
+			
+			
+			
+			break;
+		case ATTACK:
+			break;
+		case RECOVERING:
+			break;
+		case RETREAT:
+			break;
+		default:
+			break;
+		
+		}
+	}
+	
 	private int signOf(float num) {
 		  int operation;
 		  operation = (int) (num/(Math.abs(num))); 
@@ -312,6 +393,37 @@ public class EnemyChampion extends GameObject{
 		}
 		
 
+	}
+	
+	void checkPlayerState() {
+		
+		playerCurrentXpos = player.x;
+		
+		int playerDirection = playerCurrentXpos - playerPreviousXPos;
+		
+		final int FORWARD = 1;
+		final int BACKWARDS = -1;
+		
+		if (playerDirection > FORWARD) {
+			currentPlayerState = PLAYER_STATE.APROCHING;
+		} else if (playerDirection < BACKWARDS) {
+			currentPlayerState = PLAYER_STATE.RETREATING;
+		} else {
+			currentPlayerState = PLAYER_STATE.IDLE;
+		}
+		
+		
+		if (currentPlayerState == PLAYER_STATE.IDLE) {
+			stillnesCounter ++;
+		} else {
+			stillnesCounter = 0;
+		}
+		
+		
+
+		
+		playerPreviousXPos = player.x;
+		
 	}
 
 

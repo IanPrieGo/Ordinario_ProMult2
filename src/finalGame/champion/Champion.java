@@ -48,6 +48,14 @@ public class Champion extends GameObject{
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
 	
+	//Orientation Constants
+	final boolean FACING_LEFT = true;
+	final boolean FACING_RIGHT =  false;
+	
+	
+	
+	
+	
 	// Variables sin Utilizar
 	String NAME;
 	String FACTION;
@@ -298,6 +306,10 @@ public class Champion extends GameObject{
 		}	
 		
 	}
+	
+	void actionManager2() {
+		
+	}
 
 //	void setConfiguration() {
 //		
@@ -331,17 +343,16 @@ public class Champion extends GameObject{
 //		
 //	}
 	
-//	boolean getOrientation() {
-//		
-//		boolean orientation = true;
-//		
-//		if (keyH.rightPressed) {
-//			orientation = true;
-//		} else if (keyH.leftPressed){
-//			orientation = false;
-//		}
-//		
-//		return orientation;
-//	}
+	boolean getOrientation() {
+		
+		
+		if (keyHan.rightPressed) {
+			return FACING_RIGHT;
+		} else if (keyHan.leftPressed){
+			return FACING_LEFT;
+		}
+		return (Boolean) null;
+		
+	}
 
 }

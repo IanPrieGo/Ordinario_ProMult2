@@ -19,13 +19,24 @@ public class KeyHandler implements KeyListener, MouseListener{
 	public boolean downPressed = false;
 	public boolean leftPressed = false;
 	public boolean rightPressed = false;
+	
 	public boolean basicAtk = false;
 	public boolean highAtk = false;
 	public boolean longAtk = false;
 	public boolean lowAtk = false;
+	
 	public boolean attackKeyReleased = false;
 	public boolean attackKeyPressed = false;
+	
 	public boolean spacePressed = false;
+	
+	
+	public boolean normalAttack = false;
+	public boolean block = false;
+	public boolean specialAttack = false;
+	
+	
+	
 	
 	public boolean test = true;
 	
