@@ -105,23 +105,26 @@ public class AiTesting extends State implements Statemethot{
 			
 			if (code == KeyEvent.VK_I) {
 				game.keyH.highAtk = true;
-				game.keyH.attackKeyReleased = false;
 				game.keyH.attackKeyPressed = true;
+				
+				game.keyH.normalAttack = true;
+				
 			}
 			if (code == KeyEvent.VK_J) {
 				game.keyH.basicAtk = true;
-				game.keyH.attackKeyReleased = false;
 				game.keyH.attackKeyPressed = true;
+				
+				game.keyH.specialAttack = true;
 			}
 			if (code == KeyEvent.VK_K) {
 				game.keyH.lowAtk = true;
-				game.keyH.attackKeyReleased = false;
 				game.keyH.attackKeyPressed = true;
 			}
 			if (code == KeyEvent.VK_L) {
 				game.keyH.longAtk = true;
-				game.keyH.attackKeyReleased = false;
 				game.keyH.attackKeyPressed = true;
+				
+				game.keyH.block = true;
 			}
 			
 		}
@@ -156,23 +159,28 @@ public class AiTesting extends State implements Statemethot{
 			
 			if (code == KeyEvent.VK_I) {
 				game.keyH.highAtk = false;
-				game.keyH.attackKeyReleased = true;
 				game.keyH.attackKeyPressed = false;
+				
+				game.keyH.normalAttack = false;
+				
 			}
 			if (code == KeyEvent.VK_J) {
 				game.keyH.basicAtk = false;
-				game.keyH.attackKeyReleased = true;
 				game.keyH.attackKeyPressed = false;
+				
+				game.keyH.specialAttack = false;
+				
 			}
 			if (code == KeyEvent.VK_K) {
 				game.keyH.lowAtk = false;
-				game.keyH.attackKeyReleased = true;
 				game.keyH.attackKeyPressed = false;
 			}
 			if (code == KeyEvent.VK_L) {
 				game.keyH.longAtk = false;
-				game.keyH.attackKeyReleased = true;
 				game.keyH.attackKeyPressed = false;
+				
+				game.keyH.block = false;
+				
 			}
 			
 		} 

@@ -178,8 +178,7 @@ public class EnemyChampion extends GameObject{
 	
 	public void update() {
 		
-		checkPlayerState();
-		System.out.println(currentPlayerState);
+
 		
 		if (y < (floorHeight - height)) {
 			onFloor = false;
@@ -239,7 +238,6 @@ public class EnemyChampion extends GameObject{
 			currentSprite = sprites[EnemyChampion.IDLE_SALTO].getScaledInstance(width, height, 0);
 		}
 		
-		this.behavior1();
 		
 
 

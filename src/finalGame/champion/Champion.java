@@ -32,8 +32,10 @@ public class Champion extends GameObject{
 	
 	Image currentSprite;
 	BufferedImage [] sprites;
+	int currentSpriteIndex = 1;
 	int spriteCounter = 0;
 	boolean spriteKey = true;
+	boolean staticAnimation = false;
 	
 	HitBox championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
 	HitBox currentHitbox = new HitBox();
@@ -44,13 +46,20 @@ public class Champion extends GameObject{
 	int enemyHealth = 100;
 	
 	boolean isAttacking;
-	
+	boolean isBlocking;
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
 	
 	//Orientation Constants
 	final boolean FACING_LEFT = true;
 	final boolean FACING_RIGHT =  false;
+	
+	//Sprite Index Constants
+	final int SPRITE_IDLE = 1;
+	final int SPRITE_ATAQUE_ESPECIAL = 3;
+	final int SPRITE_ATAQUE_NORMAL = 5;
+	final int SPRITE_BLOQUEO = 9;
+	
 	
 	
 	
@@ -65,7 +74,9 @@ public class Champion extends GameObject{
 	boolean ultReady;
 	int ultCharge;
 	public int health = 100;
-	boolean isBlocking;
+
+	private boolean justAttacked;
+	
 	
 	
 	
@@ -75,6 +86,8 @@ public class Champion extends GameObject{
 		this.hitBoxMask = hitBoxMask;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	public Champion(GamePanel gp, KeyHandler keyH, EnemyChampion enemy) {
@@ -84,6 +97,8 @@ public class Champion extends GameObject{
 		this.enemy = enemy;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	public Champion(GamePanel gps, KeyHandler keyHs) {
@@ -94,6 +109,8 @@ public class Champion extends GameObject{
 //		this.hitBoxMask = enemy.championBox;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	public void getPlayerSprite() {
@@ -115,7 +132,11 @@ public class Champion extends GameObject{
 				resourceFolder + "\\DumSprites_AtaqueBajo_Salto.png",
 				// Ataque Bajo Normal [7]
 				resourceFolder + "\\DumSprites_AtaqueBajo_Normal.png",
-				// Arnold [8]
+				// Bloque Salto [8]
+				resourceFolder + "\\DumSprites_Bloqueo_Salto.png",
+				// Bloqueo Normal [9]
+				resourceFolder + "\\DumSprites_Bloqueo_Normal.png",
+				// Arnold [10]
 				resourceFolder + "\\ArnoldGuapo.png"
 		};
 		
@@ -142,10 +163,11 @@ public class Champion extends GameObject{
 	}
 	
 	public void update() {
-		
-		movementManager();
+			
 		actionManager();
-		spriteManager();
+		animationPlayer();
+				
+
 //		System.out.println(spriteCounter);
 //		System.out.println("Attack Key Pressed: " + keyHan.attackKeyPressed);
 //		System.out.println("Sprite Key: " + spriteKey);aw
@@ -181,63 +203,7 @@ public class Champion extends GameObject{
 		
 	}
 	
-	void spriteManager() {
-		
-		if (spriteCounter > 0) {
-			spriteCounter -=2;
-		} 
 
-		if (keyHan.attackKeyPressed && spriteKey) {
-			spriteCounter = 12; 
-			spriteKey = false;
-		}
-		
-		if (!keyHan.attackKeyPressed) {
-			spriteKey = true;
-		}
-		
-		if (onFloor) {
-			currentSprite = sprites[1].getScaledInstance(width, height, 0);
-			
-			if (spriteCounter > 0) {
-				if(keyHan.highAtk) { //ACTION EXECUTIONER
-					currentSprite = sprites[3].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.basicAtk) {
-					currentSprite = sprites[5].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.lowAtk) {
-					currentSprite = sprites[7].getScaledInstance(width, height, 0);
-				}
-				isAttacking = true;
-			}
-			if(keyHan.longAtk) {
-				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-			}
-			
-		} else {
-			currentSprite = sprites[0].getScaledInstance(width, height, 0);
-			
-			if (spriteCounter > 0) {
-				if(keyHan.highAtk) { //ACTION EXECUTIONER
-					currentSprite = sprites[2].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.basicAtk) {
-					currentSprite = sprites[4].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.lowAtk) {
-					currentSprite = sprites[6].getScaledInstance(width, height, 0);
-				}
-				isAttacking = true;
-			}
-			if(keyHan.longAtk) {
-				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-			}
-		}
-
-
-		
-	}
 	void movementManager() {
 		//MOVMENT MANAGER
 		if (y < (floorHeight - height)) {
@@ -270,45 +236,128 @@ public class Champion extends GameObject{
 			
 			jumpStrength = 0;
 		}
+		
+		
+		championBox.x = x + 7;
+		championBox.y = y + 10;
+		
+		
+		
 	}
+	
+
 	
 	void actionManager() {
 		
-		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+		movementManager();
 		
-		if (keyHan.basicAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
+		if (keyHan.normalAttack ) {
 			
-		} else if (keyHan.highAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + 85, y + 10, 30, 20, Color.red);
+			normalAttack();
+			playAnimation(SPRITE_ATAQUE_NORMAL);
 			
-		} else if (keyHan.lowAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + 82, y + 95, 27, 27, Color.red);
+		}
+		
+		if (keyHan.block) {
+			
+			isBlocking = true;
+			playAnimation(SPRITE_BLOQUEO);
 			
 		} else {
+			isBlocking = false;
+		}
+
+		
+		if (keyHan.specialAttack) {
+			
+			specialAttack();
+			playAnimation(SPRITE_ATAQUE_ESPECIAL);
+			
+		}
+		
+		if (spriteCounter <= 9) {
 			currentHitbox = new HitBox();
 		}
 		
-		if (currentHitbox.intersects(hitBoxMask)) {
-			
-			System.out.println("HitDetected");
-			
-			if (keyHan.basicAtk) {
-				enemyHealth -= power;
-			}
-			if (keyHan.highAtk) {
-				enemyHealth -= power * 3;
-			}
-			if (keyHan.lowAtk) {
-				enemyHealth -= power * 2;
-			}
-			
-		}	
+		checkAttackCollision();
+		
 		
 	}
 	
-	void actionManager2() {
+
+
+	void animationPlayer(){
 		
+		if (spriteCounter > 0) {
+			spriteCounter -=2;
+		} 
+
+		if (!keyHan.attackKeyPressed) {
+			spriteKey = true;
+			staticAnimation = false;
+		}
+		
+		if (spriteCounter <= 0 && staticAnimation != true) {
+			
+			if (onFloor) {
+				currentSprite = sprites[SPRITE_IDLE].getScaledInstance(width, height, 0);
+			} else {
+				currentSprite = sprites[SPRITE_IDLE - 1].getScaledInstance(width, height, 0);
+
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	void playAnimation(int spriteIndex) {
+		
+		if (!onFloor) {
+			spriteIndex -=1;
+		}
+		
+		if (spriteKey) {
+			
+			if (spriteIndex == SPRITE_BLOQUEO) {
+				currentSprite = sprites[spriteIndex].getScaledInstance(width, height, 0);
+				staticAnimation = true;
+				
+			} else {
+				currentSprite = sprites[spriteIndex].getScaledInstance(width, height, 0);
+				spriteCounter = 10;
+				spriteKey = false;
+				currentSpriteIndex = spriteIndex;
+			}
+			
+			
+			
+		
+		}
+	}
+	
+	void checkAttackCollision() {
+		if (currentHitbox.intersects(hitBoxMask)) {
+			
+			System.out.println("HitDetected");
+		}
+	}
+	
+	
+	void normalAttack() {
+		currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
+			
+	}
+	
+	void block() {
+		isBlocking = true;
+				
+	}
+
+	void specialAttack() {
+		currentHitbox = new HitBox(x + 85, y + 10, 30, 20, Color.red);
+				
 	}
 
 //	void setConfiguration() {
@@ -319,9 +368,7 @@ public class Champion extends GameObject{
 //		
 //	}
 //	
-	void normalAttack() {
-		
-	}
+
 //	
 //	void lowAttack() {
 //		
