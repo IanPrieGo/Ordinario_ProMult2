@@ -24,12 +24,12 @@ public class MAIN extends JFrame{
 		GamePanel gameScreen = new GamePanel();	
 		window.add(gameScreen, BorderLayout.CENTER);
 		
-		//Pablo atempt to add ui
-		add(new GameUI());
-		
 		window.pack();
 		
 		gameScreen.startGameThread();
+		
+		//Pablo atempt to add UI
+				add(new GameUI());
 		
 		window.setVisible (true);
 		
