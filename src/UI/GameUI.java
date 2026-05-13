@@ -1,21 +1,20 @@
 package UI;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 
-public class GameUI {
+
+public class GameUI extends JPanel{
 	
 	ImageIcon uI = new ImageIcon("src/Resourses/SSSBackgrounds.png");
 	Image top;
 	
 	public GameUI() {
 		
-		top = uI.getImage();
+		top = new ImageIcon("SSSBackgrounds.png").getImage();
 	}
 	
-	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
