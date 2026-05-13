@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class GameUI {
 	
-	ImageIcon uI = new ImageIcon("SSSBackgrounds.png");
+	ImageIcon uI = new ImageIcon("src/Resourses/SSSBackgrounds.png");
 	Image top;
 	
 	public GameUI() {
