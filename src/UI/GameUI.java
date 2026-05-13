@@ -2,7 +2,6 @@ package UI;
 
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 
 
 public class GameUI extends JPanel{
@@ -12,12 +11,12 @@ public class GameUI extends JPanel{
 	
 	public GameUI() {
 		
-		top = new ImageIcon("SSSBackgrounds.png").getImage();
+		top = new ImageIcon("src/Resourses/SSSBackgrounds.png").getImage();
 	}
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.drawImage(top, 10, 10, 10, 10, this);
+		g.drawImage(top, 0, 0, 10, 10, this);
 	}
 }
