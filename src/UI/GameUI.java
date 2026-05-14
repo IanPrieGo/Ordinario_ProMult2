@@ -29,6 +29,7 @@ public class GameUI{
 	int yWhy=500;
 	int timerWidth = 25;
 	boolean timerKey = true;
+	boolean timerKey2 = true;
 	
 	BufferedImage bar;
 	BufferedImage win;
@@ -36,7 +37,7 @@ public class GameUI{
 	
 	JButton newGame;
 	
-	public int timer = 10;
+	public int timer = 100;
 	private long lastTime = System.currentTimeMillis();
 	
 	public void update() {
@@ -45,16 +46,25 @@ public class GameUI{
 
 	    if(currentTime - lastTime >= 1000) {
 	    	if(timer > 0) {
-	            timer--;
+	            timer-=10;
+	            
+	   
+	            
+	            
 	        }
+	    	
+	         if (timer < 100 && timerKey) {
+	        	 timerWidth -= 10;
+	        	 timerKey = !timerKey;
+	         } else if (timer < 10 && timerKey2) {
+	        	 timerWidth -= 10;
+	        	 timerKey2 = !timerKey2;
+	         }
+	            
 
 	        lastTime = currentTime;
 	    }
-		if (timer < 100 && timerKey) {
-	    	timerWidth -= 10;
-	    	
-	    	timerKey = !timerKey;
-		}
+		
 	}
 		
 	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
@@ -141,6 +151,7 @@ public class GameUI{
 		 if (gameEnd()) {
 
 		        timer = 200;
+		        timerWidth = 25;
 
 		        player.health = 100;
 
