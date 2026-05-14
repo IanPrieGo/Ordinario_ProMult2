@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.imageio.ImageIO;
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
-import finalGame.champion.Champion;
 import finalGame.combatArena.Location;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,8 +15,6 @@ public class GameUI{
 	
 	public GamePanel gp;
 	public KeyHandler keyHan;
-	public Champion player;
-	public Champion enemy;
 	public Location arena;
 	
 	int xWhy;
@@ -50,12 +47,10 @@ public class GameUI{
 		}
 	}
 		
-	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
+	public GameUI (GamePanel gp, KeyHandler keyH) {
 		this.gp = gp;
 		this.keyHan = keyH;
 		xWhy = gp.screenWidth;
-		this.player = player;
-	    this.enemy = enemy;
 	    
 	    
 		try {
