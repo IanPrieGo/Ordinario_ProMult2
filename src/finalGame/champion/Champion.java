@@ -156,14 +156,14 @@ public class Champion extends GameObject{
 		
 		//PlayerHP
 		g2.setColor(Color.black);
-		g2.drawRect(110, 70, 180, 25);
+		g2.drawRect(110, 74, 176, 25);
 		g2.setColor(Color.red);
-		g2.fillRect(110, 70, health + 80, 25);
+		g2.fillRect(110, 74, health + 76, 25);
 		//MasiosareHP
 		g2.setColor(Color.black);
-		g2.drawRect(478, 70, 180, 25);
+		g2.drawRect(478, 75, 180, 25);
 		g2.setColor(Color.red);
-		g2.fillRect(478, 70, enemyHealth + 80, 25);
+		g2.fillRect(478, 75, enemyHealth + 80, 25);
 		
 	}
 	
