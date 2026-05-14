@@ -89,8 +89,7 @@ public class GameUI{
 		}
 		
 		newGame = new JButton("New Game");
-		newGame.setBounds(gp.screenWidth/2,gp.screenHeight/2,100,100);
-
+		newGame.setBounds((gp.screenWidth/2)-50,gp.screenHeight/2,100,100);
 		newGame.addActionListener(
             e -> restartGame()
         );
