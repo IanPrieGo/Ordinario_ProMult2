@@ -40,7 +40,7 @@ public class GameUI{
 	
 	JButton newGame;
 	
-	public int timer = 100;
+	public int timer = 200;
 	private long lastTime = System.currentTimeMillis();
 	
 	public void update() {
@@ -49,10 +49,7 @@ public class GameUI{
 
 	    if(currentTime - lastTime >= 1000) {
 	    	if(timer > 0) {
-	            timer-=10;
-	            
-	   
-	            
+	            timer-=1;
 	            
 	        }
 	    	
@@ -67,7 +64,7 @@ public class GameUI{
 
 	        lastTime = currentTime;
 	    }
-		
+	    newGame.setVisible(gameEnd());
 	}
 		
 	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
@@ -78,7 +75,8 @@ public class GameUI{
 		xWhy = gp.screenWidth;
 		yWhy = gp.screenHeight;
 		
-			    
+		player.health = 100;
+	    enemy.enemyHealth = 100;
 	    
 		try {
 			bar = ImageIO.read( new File ("src\\Resourses\\SSSBackgrounds.png"));
@@ -95,7 +93,6 @@ public class GameUI{
         );
 
         gp.add(newGame);
-        newGame.setVisible(true);
 
 	}
 	
@@ -117,10 +114,12 @@ public class GameUI{
 
 		    if (player.health <= 0) {
 		        g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+		        newGame.setVisible(true);
 		    }
 
 		    if (enemy.enemyHealth <= 0) {
 		        g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+		        newGame.setVisible(true);
 
 		    }
 
@@ -128,17 +127,16 @@ public class GameUI{
 
 		        if (player.health < enemy.enemyHealth) {
 		            g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+		            newGame.setVisible(true);
 
 		        }
 
 		        if (player.health > enemy.enemyHealth) {
 		            g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+		            newGame.setVisible(true);
 
 		        }
-		    } else {
-		    	
 		    }
-
 //		    newGame.setVisible(gameEnd());
     }
 
@@ -156,13 +154,12 @@ public class GameUI{
 	}
 	
 	public void restartGame(){
-		 if (gameEnd()) {
+		 if (gameEnd() == true) {
 
 		        timer = 200;
 		        timerWidth = 25;
 
 		        player.health = 100;
-
 		        enemy.enemyHealth = 100;
 
 		        player.x = 50;
