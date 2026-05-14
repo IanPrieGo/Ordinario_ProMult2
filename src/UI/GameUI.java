@@ -2,6 +2,7 @@ package UI;
 
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
 
 
 public class GameUI extends JPanel{
@@ -17,6 +18,6 @@ public class GameUI extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.drawImage(top, 0, 0, 10, 10, this);
+		g.drawImage(top, 10, 10, 10, 10, this);
 	}
 }

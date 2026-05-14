@@ -5,12 +5,9 @@ import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
-import UI.GameUI;
-
-public class MAIN extends JFrame{
+public class MAIN {
 	
-	public MAIN() {
-		
+	public static void main (String [] args) {
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(true) ;
@@ -25,19 +22,15 @@ public class MAIN extends JFrame{
 		window.add(gameScreen, BorderLayout.CENTER);
 		
 		window.pack();
-		
+				
 		gameScreen.startGameThread();
-		
-		//Pablo atempt to add UI
-				add(new GameUI());
 		
 		window.setVisible (true);
 		
+		
+		
+		
 	}
 	
-	public static void main (String [] args) {
-		
-		new MAIN();
-		
-	}
+
 }
