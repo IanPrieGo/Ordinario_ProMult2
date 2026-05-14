@@ -3,32 +3,31 @@ package UI;
 import java.awt.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
 import finalGame.champion.Champion;
 import finalGame.combatArena.Location;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 
-public class GameUI extends JPanel{
+public class GameUI{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public Champion player1;
+	public GamePanel gp;
+	public KeyHandler keyHan;
+	public Champion player;
+	public Champion enemy;
 	public Location arena;
 	
-	int xWhy = 700;
-	int yWhy = 180;
+	int xWhy;
+	int yWhy=500;
+	int timerWidth = 25;
+	boolean timerKey = true;
 	
 	BufferedImage bar;
+	BufferedImage win;
+	BufferedImage lose;
 	
 	public int timer = 200;
 	private long lastTime = System.currentTimeMillis();
@@ -38,21 +37,31 @@ public class GameUI extends JPanel{
 	    long currentTime = System.currentTimeMillis();
 
 	    if(currentTime - lastTime >= 1000) {
-
-	        if(timer > 0) {
+	    	if(timer > 0) {
 	            timer--;
 	        }
 
 	        lastTime = currentTime;
 	    }
+		if (timer < 100 && timerKey) {
+	    	timerWidth -= 10;
+	    	
+	    	timerKey = !timerKey;
+		}
 	}
 		
-	public GameUI (GamePanel gp, KeyHandler keyH) {
-		
-		
-		
+	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
+		this.gp = gp;
+		this.keyHan = keyH;
+		xWhy = gp.screenWidth;
+		this.player = player;
+	    this.enemy = enemy;
+	    
+	    
 		try {
 			bar = ImageIO.read( new File ("src\\Resourses\\SSSBackgrounds.png"));
+			win = ImageIO.read( new File ("src\\Resourses\\Win.png"));
+			lose = ImageIO.read( new File ("src\\Resourses\\Lose.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,7 +75,7 @@ public class GameUI extends JPanel{
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 40));
 
-        g2.drawString(String.valueOf(timer), xWhy/2, yWhy/2);
+        g2.drawString(String.valueOf(timer), (xWhy/2) - timerWidth, yWhy-410);
         
     }
 }

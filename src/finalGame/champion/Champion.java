@@ -41,8 +41,8 @@ public class Champion extends GameObject{
 	HitBox hitBoxMask;
 	Champion enemy;
 	
-	int championHealth = 100;
-	int enemyHealth = 100;
+	public int health = 100;
+	public int enemyHealth = 100;
 	
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
@@ -55,7 +55,7 @@ public class Champion extends GameObject{
 	boolean attackLanded;
 	boolean ultReady;
 	int ultCharge;
-	public int health = 100;
+	
 	boolean isBlocking;
 	boolean isAttacking;
 	
@@ -158,7 +158,7 @@ public class Champion extends GameObject{
 		g2.setColor(Color.black);
 		g2.drawRect(110, 70, 180, 25);
 		g2.setColor(Color.red);
-		g2.fillRect(110, 70, championHealth + 80, 25);
+		g2.fillRect(110, 70, health + 80, 25);
 		//MasiosareHP
 		g2.setColor(Color.black);
 		g2.drawRect(478, 70, 180, 25);
