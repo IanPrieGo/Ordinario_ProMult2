@@ -1,6 +1,5 @@
 package gamestates;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -40,7 +39,7 @@ public class Playing extends State implements Statemethot{
 		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
 		arena = new Location(game, game.keyH); 
 		
-		UIbar = new GameUI();
+		UIbar = new GameUI(game, game.keyH);
 		
 		gameMatch = new GameMatch();
 		
@@ -62,7 +61,7 @@ public class Playing extends State implements Statemethot{
 			
 			
 			arena.update();
-			UIbar.draw();
+			
 			player1.update();
 			
 		}
@@ -74,6 +73,7 @@ public class Playing extends State implements Statemethot{
 			g2.fillOval(game.screenWidth/2, game.screenHeight/2, 10, 10);
 			arena.draw(g2);
 			player1.draw(g2);
+			UIbar.draw(g2);
 
 			
 //		    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
