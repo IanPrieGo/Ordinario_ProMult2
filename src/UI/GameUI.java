@@ -4,8 +4,6 @@ import java.awt.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
@@ -18,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class GameUI extends JPanel{
+public class GameUI{
 	
 	public Champion player;
 	public Champion enemy;
@@ -38,7 +36,7 @@ public class GameUI extends JPanel{
 	
 	JButton newGame;
 	
-	public int timer = 200;
+	public int timer = 10;
 	private long lastTime = System.currentTimeMillis();
 	
 	public void update() {
@@ -65,7 +63,8 @@ public class GameUI extends JPanel{
 		this.player=player;
 		this.enemy=enemy;
 		xWhy = gp.screenWidth;
-	    
+		
+			    
 	    
 		try {
 			bar = ImageIO.read( new File ("src\\Resourses\\SSSBackgrounds.png"));
@@ -76,14 +75,14 @@ public class GameUI extends JPanel{
 		}
 		
 		newGame = new JButton("New Game");
-		newGame.setBounds(650,20,100,30);
+		newGame.setBounds(gp.screenWidth/2,gp.screenHeight/2,100,100);
 
 		newGame.addActionListener(
             e -> restartGame()
         );
 
-        add(newGame);
-        newGame.setVisible(false);
+        gp.add(newGame);
+        newGame.setVisible(true);
 
 	}
 	
@@ -122,7 +121,7 @@ public class GameUI extends JPanel{
 		        }
 		    }
 
-		    newGame.setVisible(gameEnd());
+//		    newGame.setVisible(gameEnd());
     }
 
 	public boolean gameEnd() {
