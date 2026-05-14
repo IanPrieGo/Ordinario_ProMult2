@@ -87,6 +87,8 @@ public class Champion extends GameObject{
 		getPlayerSprite();
 	}
 	
+	
+	
 	public void getPlayerSprite() {
 		
 		String [] spritesPaths = {

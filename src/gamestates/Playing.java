@@ -59,8 +59,8 @@ public class Playing extends State implements Statemethot{
 			
 			
 			arena.update();
-			
 			player1.update();
+			UIbar.update();
 			
 		}
 
