@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import UI.GameUI;
 import finalGame.GameMatch;
 import finalGame.GamePanel;
 import finalGame.MatchInfoDisplay;
@@ -17,6 +19,9 @@ public class Playing extends State implements Statemethot{
 	public HitBox enemy;
 	public Champion player1;
 	public Location arena;
+	
+	public GameUI UIbar;
+	
 	public GameMatch gameMatch;
 	
 	boolean startKey = true;
@@ -34,6 +39,8 @@ public class Playing extends State implements Statemethot{
 		
 		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
 		arena = new Location(game, game.keyH); 
+		
+		UIbar = new GameUI();
 		
 		gameMatch = new GameMatch();
 		
@@ -55,6 +62,7 @@ public class Playing extends State implements Statemethot{
 			
 			
 			arena.update();
+			UIbar.draw();
 			player1.update();
 			
 		}
