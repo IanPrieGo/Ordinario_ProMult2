@@ -16,6 +16,7 @@ public class Playing extends State implements Statemethot{
 	
 	public HitBox enemy;
 	public Champion player1;
+	public Champion enemy1;
 	public Location arena;
 	
 	public GameUI UIbar;
@@ -33,12 +34,14 @@ public class Playing extends State implements Statemethot{
 		//Instancia de la clase "Champion", para que el jugador controle
 		player1 = new Champion(game, game.keyH, enemy); 
 		System.out.println(game.keyH);
-//		Champion player1 = new Champion(this, keyH); 
+//		Champion player1 = new Champion(this, keyH);
+		
+		enemy1 = new Champion(game, game.keyH);
 		
 		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
 		arena = new Location(game, game.keyH); 
 		
-		UIbar = new GameUI(game, game.keyH);
+		UIbar = new GameUI(game, game.keyH, player1, enemy1);
 		
 		gameMatch = new GameMatch();
 		
