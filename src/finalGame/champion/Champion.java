@@ -41,7 +41,7 @@ public class Champion extends GameObject{
 	HitBox hitBoxMask;
 	Champion enemy;
 	
-	public int health = 100;
+	public int health = 0;
 	public int enemyHealth = 100;
 	
 	

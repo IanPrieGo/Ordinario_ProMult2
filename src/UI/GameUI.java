@@ -35,6 +35,9 @@ public class GameUI{
 	BufferedImage win;
 	BufferedImage lose;
 	
+	int resultScreenW = 860;
+	int resultScreenH = 360;
+	
 	JButton newGame;
 	
 	public int timer = 100;
@@ -73,6 +76,7 @@ public class GameUI{
 		this.player=player;
 		this.enemy=enemy;
 		xWhy = gp.screenWidth;
+		yWhy = gp.screenHeight;
 		
 			    
 	    
@@ -109,26 +113,31 @@ public class GameUI{
 		    g2.drawString(
 		        String.valueOf(timer),
 		        (xWhy / 2) - timerWidth,
-		        yWhy - 410
+		        90
 		    );
 
 		    if (player.health <= 0) {
-		        g2.drawImage(lose, xWhy/2, yWhy/2, 860, 360, null);
+		        g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		    }
 
 		    if (enemy.enemyHealth <= 0) {
-		        g2.drawImage(win, xWhy/2, yWhy/2, 860, 360, null);
+		        g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+
 		    }
 
 		    if (timer == 0) {
 
 		        if (player.health < enemy.enemyHealth) {
-		            g2.drawImage(lose, xWhy/2, yWhy/2, 860, 360, null);
+		            g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+
 		        }
 
 		        if (player.health > enemy.enemyHealth) {
-		            g2.drawImage(win, xWhy/2, yWhy/2, 860, 360, null);
+		            g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
+
 		        }
+		    } else {
+		    	
 		    }
 
 //		    newGame.setVisible(gameEnd());
