@@ -22,7 +22,7 @@ public class MAIN {
 		window.add(gameScreen, BorderLayout.CENTER);
 		
 		window.pack();
-				
+		
 		gameScreen.startGameThread();
 		
 		window.setVisible (true);

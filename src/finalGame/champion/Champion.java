@@ -12,7 +12,7 @@ public class Champion extends GameObject{
 	
 	
 	//Variables en Uso
-	float floorHeight = 400;
+	public float floorHeight = 400;
 
 	int power = 5;
 	int speed = 5;	
@@ -23,12 +23,12 @@ public class Champion extends GameObject{
 	int rawHeight = 700;
 	int rawWidth = 500;
 	
-	int height = rawHeight / scale;
+	public int height = rawHeight / scale;
 	int width = rawWidth / scale;
 	
 	
-	int x = 50;
-	int y = (int)(floorHeight - height);
+	public int x = 50;
+	public int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
 	BufferedImage [] sprites;
@@ -41,7 +41,8 @@ public class Champion extends GameObject{
 	HitBox hitBoxMask;
 	Champion enemy;
 	
-	int enemyHealth = 100;
+	public int health = 0;
+	public int enemyHealth = 100;
 	
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
@@ -54,7 +55,7 @@ public class Champion extends GameObject{
 	boolean attackLanded;
 	boolean ultReady;
 	int ultCharge;
-	public int health = 100;
+	
 	boolean isBlocking;
 	boolean isAttacking;
 	
@@ -85,6 +86,8 @@ public class Champion extends GameObject{
 		
 		getPlayerSprite();
 	}
+	
+	
 	
 	public void getPlayerSprite() {
 		
@@ -151,10 +154,16 @@ public class Champion extends GameObject{
 		g2.setColor(currentHitbox.color);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
 		
+		//PlayerHP
 		g2.setColor(Color.black);
-		g2.drawRect(10, 50, 300, 25);
+		g2.drawRect(110, 74, 176, 25);
 		g2.setColor(Color.red);
-		g2.fillRect(10, 50, enemyHealth * 3, 25);
+		g2.fillRect(110, 74, health + 76, 25);
+		//MasiosareHP
+		g2.setColor(Color.black);
+		g2.drawRect(478, 75, 180, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(478, 75, enemyHealth + 80, 25);
 		
 	}
 	
