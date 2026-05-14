@@ -12,6 +12,8 @@ public class AiTesting extends State implements Statemethot{
 	EnemyChampion enemy;
 	Location arena;
 	
+	LocalCoordTest lct;
+	
 	int player1StartingX = 50;
 	int player2StartingX = 500;
 	
@@ -27,6 +29,8 @@ public class AiTesting extends State implements Statemethot{
 		enemy.x = this.player2StartingX;
 		player.x = this.player1StartingX;
 		
+		lct = new LocalCoordTest(game, game.keyH);	
+		
 		
 		arena = new Location(game, game.keyH); 
 		
@@ -38,6 +42,8 @@ public class AiTesting extends State implements Statemethot{
 		player.update();
 		enemy.update();
 		
+//		lct.update();
+		
 		
 	 }
 
@@ -46,6 +52,8 @@ public class AiTesting extends State implements Statemethot{
 		 	arena.draw(g2);
 			player.draw(g2);
 			enemy.draw(g2);
+			
+//			lct.draw(g2);
 			
 			g2.dispose();
 			

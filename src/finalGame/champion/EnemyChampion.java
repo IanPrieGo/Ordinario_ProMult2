@@ -38,6 +38,12 @@ public class EnemyChampion extends GameObject{
 	boolean spriteKey = true;
 	
 	HitBox hurtBox = new HitBox();
+	int hurtBoxX = 15;
+	int hurtBoxY = 10;
+	
+	int hurtBoxW = 150;
+	int hurtBoxH = 55;
+
 	HitBox currentHitbox = new HitBox();
 	
 	HitBox hitBoxMask;
@@ -113,8 +119,8 @@ public class EnemyChampion extends GameObject{
 		super(gp, keyH);
 		
 		getChampionSprite();
-		hurtBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
-		
+		hurtBox = new HitBox(x + hurtBoxX, y + hurtBoxY, ((rawHeight - hurtBoxH)/scale), ((rawWidth - hurtBoxW)/scale), Color.yellow, HitBox.player);
+	
 	}
 	
 	public EnemyChampion(GamePanel gp, KeyHandler keyH, Champion player) {
@@ -178,6 +184,9 @@ public class EnemyChampion extends GameObject{
 	
 	public void update() {
 		
+		
+		movementFactor = this.signOf(player.x - this.x);
+		
 
 		
 		if (y < (floorHeight - height)) {
@@ -198,8 +207,22 @@ public class EnemyChampion extends GameObject{
 		//DrawSprite
 		alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
 		g2.setComposite(alcom);
-		g2.drawImage(currentSprite, x, y, null);
 		
+		if (movementFactor > 0) {
+			g2.drawImage(currentSprite, (x) - width/2, (y), null);
+		} else {
+			g2.drawImage(
+		    		currentSprite,
+		            (x + width) - (width/2), y,   // punto de destino (esquina derecha)
+		            x - (width/2), y + height,  // punto opuesto (esquina izquierda)
+		            0, 0, width, height,   // fuente completa
+		            null
+		        );
+		}
+        
+		g2.setColor(Color.red);
+		g2.drawRect(x - (width/2), y, width, height);
+		g2.fillOval(x - 5, y - 5, 10, 10);
 		
 		//Draw character HurtBox
 		g2.setPaint(Color.yellow);
@@ -229,8 +252,8 @@ public class EnemyChampion extends GameObject{
 		desiredDist = (float)(this.width * 1.5);
 		
 		
-		hurtBox.x = x + 7;
-		hurtBox.y = y + 10;
+		hurtBox.x = (x - (hurtBox.width/2)) + hurtBoxX;
+		hurtBox.y = y + hurtBoxY;
 		
 		if (onFloor) {
 			currentSprite = sprites[EnemyChampion.IDLE_NORMAL].getScaledInstance(width, height, 0);
@@ -238,9 +261,17 @@ public class EnemyChampion extends GameObject{
 			currentSprite = sprites[EnemyChampion.IDLE_SALTO].getScaledInstance(width, height, 0);
 		}
 		
+		finalBehavior();
+
+
+	}
+	
+	void finalBehavior() {
 		
-
-
+		if (distToOponent > width*1.5) {
+			x+= movementFactor * speed;
+		}
+		
 	}
 	
 	void actionManager() {
