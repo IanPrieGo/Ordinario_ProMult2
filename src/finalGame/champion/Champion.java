@@ -12,7 +12,7 @@ public class Champion extends GameObject{
 	
 	
 	//Variables en Uso
-	float floorHeight = 400;
+	public float floorHeight = 400;
 
 	int power = 5;
 	int speed = 5;	
@@ -23,12 +23,12 @@ public class Champion extends GameObject{
 	int rawHeight = 700;
 	int rawWidth = 500;
 	
-	int height = rawHeight / scale;
+	public int height = rawHeight / scale;
 	int width = rawWidth / scale;
 	
 	
-	int x = 50;
-	int y = (int)(floorHeight - height);
+	public int x = 50;
+	public int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
 	BufferedImage [] sprites;

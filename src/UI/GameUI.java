@@ -3,22 +3,29 @@ package UI;
 import java.awt.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
 import finalGame.champion.Champion;
 import finalGame.combatArena.Location;
+import gamestates.Playing;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 
-public class GameUI{
+public class GameUI extends JPanel{
 	
 	public Champion player;
 	public Champion enemy;
 	public GamePanel gp;
 	public KeyHandler keyHan;
 	public Location arena;
+	public Playing play;
 	
 	int xWhy;
 	int yWhy=500;
@@ -28,6 +35,8 @@ public class GameUI{
 	BufferedImage bar;
 	BufferedImage win;
 	BufferedImage lose;
+	
+	JButton newGame;
 	
 	public int timer = 200;
 	private long lastTime = System.currentTimeMillis();
@@ -65,31 +74,85 @@ public class GameUI{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		newGame = new JButton("New Game");
+		newGame.setBounds(650,20,100,30);
+
+		newGame.addActionListener(
+            e -> restartGame()
+        );
+
+        add(newGame);
+        newGame.setVisible(false);
+
 	}
 	
 	public void draw(Graphics2D g2) {
-		g2.setComposite(AlphaComposite.getInstance(
-			    AlphaComposite.SRC_OVER, 1.0f));
-        g2.drawImage(bar, -30, -5, 860, 360, null);
-        
-        g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Arial", Font.BOLD, 40));
+		g2.setComposite(
+		        AlphaComposite.getInstance(
+		            AlphaComposite.SRC_OVER, 1.0f));
 
-        g2.drawString(String.valueOf(timer), (xWhy/2) - timerWidth, yWhy-410);
-        
-        if (player.health <= 0) {
-        	g2.drawImage(lose, xWhy/2,yWhy/2, 860, 360, null);
+		    g2.drawImage(bar, -30, -5, 860, 360, null);
+
+		    g2.setColor(Color.WHITE);
+		    g2.setFont(new Font("Arial", Font.BOLD, 40));
+
+		    g2.drawString(
+		        String.valueOf(timer),
+		        (xWhy / 2) - timerWidth,
+		        yWhy - 410
+		    );
+
+		    if (player.health <= 0) {
+		        g2.drawImage(lose, xWhy/2, yWhy/2, 860, 360, null);
+		    }
+
+		    if (enemy.enemyHealth <= 0) {
+		        g2.drawImage(win, xWhy/2, yWhy/2, 860, 360, null);
+		    }
+
+		    if (timer == 0) {
+
+		        if (player.health < enemy.enemyHealth) {
+		            g2.drawImage(lose, xWhy/2, yWhy/2, 860, 360, null);
+		        }
+
+		        if (player.health > enemy.enemyHealth) {
+		            g2.drawImage(win, xWhy/2, yWhy/2, 860, 360, null);
+		        }
+		    }
+
+		    newGame.setVisible(gameEnd());
+    }
+
+	public boolean gameEnd() {
+		if (player.health <= 0) {
+			return true;
         }
         if (enemy.enemyHealth <= 0) {
-        	g2.drawImage(win, xWhy/2,yWhy/2, 860, 360, null);
+        	return true;
         }
         if (timer == 0) {
-        	if (player.health < enemy.enemyHealth) {
-        		g2.drawImage(lose, xWhy/2,yWhy/2, 860, 360, null);
-        	}
-        	if (player.health > enemy.enemyHealth) {
-        		g2.drawImage(win, xWhy/2,yWhy/2, 860, 360, null);
-        	}
+        	return true;
         }
+        return false;
+	}
+	
+	public void restartGame(){
+		 if (gameEnd()) {
+
+		        timer = 200;
+
+		        player.health = 100;
+
+		        enemy.enemyHealth = 100;
+
+		        player.x = 50;
+		        player.y = (int)(player.floorHeight - player.height);
+
+		        enemy.x = 500;
+		        enemy.y = (int)(enemy.floorHeight - enemy.height);
+
+		    }
     }
 }
