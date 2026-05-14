@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
 import UI.GameUI;
 import finalGame.GameMatch;
 import finalGame.GamePanel;
@@ -49,7 +48,6 @@ public class Playing extends State implements Statemethot{
 		int healthPlayer1 = player1.health;
 		
 	}
-	
 	
 		@Override
 		public void update() {

@@ -32,7 +32,8 @@ public class GameUI extends JPanel{
 	}
 	
 	public void draw(Graphics2D g2) {
-
-        g2.drawImage(bar, -30, 0, 860, 320, null);
+		g2.setComposite(AlphaComposite.getInstance(
+			    AlphaComposite.SRC_OVER, 1.0f));
+        g2.drawImage(bar, -30, -5, 860, 360, null);
     }
 }

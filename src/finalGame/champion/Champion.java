@@ -41,6 +41,7 @@ public class Champion extends GameObject{
 	HitBox hitBoxMask;
 	Champion enemy;
 	
+	int championHealth = 100;
 	int enemyHealth = 100;
 	
 	
@@ -151,10 +152,16 @@ public class Champion extends GameObject{
 		g2.setColor(currentHitbox.color);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
 		
+		//PlayerHP
 		g2.setColor(Color.black);
-		g2.drawRect(10, 50, 300, 25);
+		g2.drawRect(110, 70, 180, 25);
 		g2.setColor(Color.red);
-		g2.fillRect(10, 50, enemyHealth * 3, 25);
+		g2.fillRect(110, 70, championHealth + 80, 25);
+		//MasiosareHP
+		g2.setColor(Color.black);
+		g2.drawRect(478, 70, 180, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(478, 70, enemyHealth + 80, 25);
 		
 	}
 	
