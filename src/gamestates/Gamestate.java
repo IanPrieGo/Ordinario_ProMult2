@@ -7,6 +7,6 @@ public enum Gamestate {
 	AI_TESTING,
 	PAUSE;
 	
-	public static Gamestate state = AI_TESTING;
+	public static Gamestate state = PLAYING;
 	
 }

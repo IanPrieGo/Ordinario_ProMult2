@@ -9,6 +9,7 @@ import finalGame.GameMatch;
 import finalGame.GamePanel;
 import finalGame.MatchInfoDisplay;
 import finalGame.champion.Champion;
+import finalGame.champion.EnemyChampion;
 import finalGame.champion.HitBox;
 import finalGame.combatArena.Location;
 
@@ -16,7 +17,7 @@ public class Playing extends State implements Statemethot{
 	
 	public HitBox enemy;
 	public Champion player1;
-	public Champion enemy1;
+	public EnemyChampion enemy1;
 	public Location arena;
 	
 	public GameUI UIbar;
@@ -36,7 +37,7 @@ public class Playing extends State implements Statemethot{
 		System.out.println(game.keyH);
 //		Champion player1 = new Champion(this, keyH);
 		
-		enemy1 = new Champion(game, game.keyH);
+		enemy1 = new EnemyChampion(game, game.keyH);
 		
 		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
 		arena = new Location(game, game.keyH); 
@@ -49,6 +50,14 @@ public class Playing extends State implements Statemethot{
 			
 		//Varibale que guarda la salud del jugador para usarlo en la GUI o para saber cuando este sea derrotado
 		int healthPlayer1 = player1.health;
+		
+		
+		
+		enemy1.setEnemy(player1);
+		player1.setEnemy(enemy1);
+		
+		
+		
 		
 	}
 	
@@ -63,6 +72,7 @@ public class Playing extends State implements Statemethot{
 			
 			arena.update();
 			player1.update();
+			enemy1.update();
 			UIbar.update();
 			
 		}
@@ -74,6 +84,7 @@ public class Playing extends State implements Statemethot{
 			g2.fillOval(game.screenWidth/2, game.screenHeight/2, 10, 10);
 			arena.draw(g2);
 			player1.draw(g2);
+			enemy1.draw(g2);
 			UIbar.draw(g2);
 
 			

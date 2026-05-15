@@ -15,7 +15,7 @@ import finalGame.*;
 public class EnemyChampion extends GameObject{
 	
 	//Variables en Uso
-	float floorHeight = 400;
+	public float floorHeight = 400;
 
 	int power = 5;
 	int speed = 5;	
@@ -26,7 +26,7 @@ public class EnemyChampion extends GameObject{
 	int rawHeight = 700;
 	int rawWidth = 500;
 	
-	int height = rawHeight / scale;
+	public int height = rawHeight / scale;
 	int width = rawWidth / scale;
 	
 	
@@ -42,7 +42,7 @@ public class EnemyChampion extends GameObject{
 	
 	
 	public int x = 50;
-	int y = (int)(floorHeight - height);
+	public int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
 	BufferedImage [] sprites;
@@ -68,7 +68,7 @@ public class EnemyChampion extends GameObject{
 	int aatackCounter = 0;
 	
 	
-	int health = 100;
+	public int health = 100;
 	
 	boolean isAttacking;
 	int attackCounter = 0;

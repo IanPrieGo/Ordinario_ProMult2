@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
 import finalGame.champion.Champion;
+import finalGame.champion.EnemyChampion;
 import finalGame.combatArena.Location;
 import gamestates.Playing;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class GameUI{
 	
 	public Champion player;
-	public Champion enemy;
+	public EnemyChampion enemy;
 	public GamePanel gp;
 	public KeyHandler keyHan;
 	public Location arena;
@@ -67,7 +68,7 @@ public class GameUI{
 	    newGame.setVisible(gameEnd());
 	}
 		
-	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
+	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, EnemyChampion enemy) {
 		this.gp = gp;
 		this.keyHan = keyH;
 		this.player=player;
@@ -76,7 +77,7 @@ public class GameUI{
 		yWhy = gp.screenHeight;
 		
 		player.health = 100;
-	    enemy.enemyHealth = 100;
+	    enemy.health = 100;
 	    
 		try {
 			bar = ImageIO.read( new File ("src\\Resourses\\SSSBackgrounds.png"));
@@ -117,7 +118,7 @@ public class GameUI{
 		        newGame.setVisible(true);
 		    }
 
-		    if (enemy.enemyHealth <= 0) {
+		    if (enemy.health <= 0) {
 		        g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		        newGame.setVisible(true);
 
@@ -125,13 +126,13 @@ public class GameUI{
 
 		    if (timer == 0) {
 
-		        if (player.health < enemy.enemyHealth) {
+		        if (player.health < enemy.health) {
 		            g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		            newGame.setVisible(true);
 
 		        }
 
-		        if (player.health > enemy.enemyHealth) {
+		        if (player.health > enemy.health) {
 		            g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		            newGame.setVisible(true);
 
@@ -144,7 +145,7 @@ public class GameUI{
 		if (player.health <= 0) {
 			return true;
         }
-        if (enemy.enemyHealth <= 0) {
+        if (enemy.health <= 0) {
         	return true;
         }
         if (timer == 0) {
@@ -160,7 +161,7 @@ public class GameUI{
 		        timerWidth = 25;
 
 		        player.health = 100;
-		        enemy.enemyHealth = 100;
+		        enemy.health = 100;
 
 		        player.x = 50;
 		        player.y = (int)(player.floorHeight - player.height);

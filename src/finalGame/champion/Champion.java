@@ -398,16 +398,16 @@ public class Champion extends GameObject{
 //		
 //	}
 	
-	boolean getOrientation() {
-		
-		
-		if (keyHan.rightPressed) {
-			return FACING_RIGHT;
-		} else if (keyHan.leftPressed){
-			return FACING_LEFT;
-		}
-		return (Boolean) null;
-		
-	}
+//	boolean getOrientation() {
+//		
+//		
+//		if (keyHan.rightPressed) {
+//			return FACING_RIGHT;
+//		} else if (keyHan.leftPressed){
+//			return FACING_LEFT;
+//		}
+//		return (Boolean) null;
+//		
+//	}
 
 }
