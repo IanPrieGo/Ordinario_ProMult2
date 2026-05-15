@@ -27,7 +27,7 @@ public class GameUI{
 	public Playing play;
 	
 	int xWhy;
-	int yWhy=500;
+	int yWhy= 500;
 	int timerWidth = 25;
 	boolean timerKey = true;
 	boolean timerKey2 = true;
@@ -98,6 +98,19 @@ public class GameUI{
 	}
 	
 	public void draw(Graphics2D g2) {
+		
+		
+		g2.setColor(Color.black);
+		g2.drawRect(110, 74, 176, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(110, 74, (int)(player.health * 1.8), 25);
+		//MasiosareHP
+		g2.setColor(Color.black);
+		g2.drawRect(478, 75, 180, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(478, 75, (int)(enemy.health * 1.8), 25);
+		
+		
 		g2.setComposite(
 		        AlphaComposite.getInstance(
 		            AlphaComposite.SRC_OVER, 1.0f));
@@ -112,6 +125,8 @@ public class GameUI{
 		        (xWhy / 2) - timerWidth,
 		        90
 		    );
+		    
+		    
 
 		    if (player.health <= 0) {
 		        g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
@@ -137,6 +152,15 @@ public class GameUI{
 		            newGame.setVisible(true);
 
 		        }
+		        
+		        
+		        
+		       
+				
+				
+				
+		        
+		        
 		    }
 //		    newGame.setVisible(gameEnd());
     }

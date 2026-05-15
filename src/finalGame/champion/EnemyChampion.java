@@ -37,11 +37,11 @@ public class EnemyChampion extends GameObject{
 	
 	int aiState = WAIT;
 	
-	
+
 	Random rng = new Random();
 	
 	
-	public int x = 50;
+	public int x = 600;
 	public int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
@@ -557,8 +557,7 @@ public class EnemyChampion extends GameObject{
 		
 		currentHitbox = new HitBox(x -(hitBoxWidth/2) + (offset * movementFactor) , y + 50, hitBoxHeigth, hitBoxWidth, Color.red);
 		
-	
-
+		checkAttackCollision();		
 	}
 	
 	void checkPlayerState() {
@@ -590,6 +589,20 @@ public class EnemyChampion extends GameObject{
 		
 		playerPreviousXPos = player.x;
 		
+	}
+	
+	
+	void checkAttackCollision() {
+		if (currentHitbox.intersects(hitBoxMask)) {
+			
+			System.out.println("HitDetected");
+			
+			if (!player.isBlocking) {
+				player.health -= 10;	
+			}
+					
+			
+		}
 	}
 
 
