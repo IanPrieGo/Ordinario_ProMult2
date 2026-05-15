@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +28,17 @@ public class EnemyChampion extends GameObject{
 	
 	int height = rawHeight / scale;
 	int width = rawWidth / scale;
+	
+	
+	final int RETREAT = 0;
+	final int PURSUE = 1;
+	final int ATTACK = 2;
+	final int WAIT = 3;
+	
+	int aiState = WAIT;
+	
+	
+	Random rng = new Random();
 	
 	
 	public int x = 50;
@@ -53,10 +65,14 @@ public class EnemyChampion extends GameObject{
 	int playerPreviousXPos;
 	
 	
+	int aatackCounter = 0;
+	
+	
 	int health = 100;
 	
 	boolean isAttacking;
 	int attackCounter = 0;
+	int waitingCounter = 0;
 	int attackAnticipation = 50;
 	
 	
@@ -65,6 +81,9 @@ public class EnemyChampion extends GameObject{
 	float  distToOponent;
 	float desiredDist;
 	int movementFactor;
+	
+	int decision;
+	int decisionTimer;
 	
 	
 	Timer timer = new Timer();
@@ -181,11 +200,21 @@ public class EnemyChampion extends GameObject{
 		
 	}
 	
+	final boolean LEFT = false;
+	final boolean RIGHT = true;
+
 	
+	boolean orientation;
 	public void update() {
 		
 		
 		movementFactor = this.signOf(player.x - this.x);
+		
+		if (movementFactor > 0) {
+			orientation = LEFT;
+		} else {
+			orientation = RIGHT;
+		}
 		
 
 		
@@ -208,7 +237,7 @@ public class EnemyChampion extends GameObject{
 		alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f);
 		g2.setComposite(alcom);
 		
-		if (movementFactor > 0) {
+		if (orientation == LEFT) {
 			g2.drawImage(currentSprite, (x) - width/2, (y), null);
 		} else {
 			g2.drawImage(
@@ -231,7 +260,7 @@ public class EnemyChampion extends GameObject{
 		g2.fillRect(hurtBox.x, hurtBox.y, hurtBox.width, hurtBox.height);
 	
 		
-		g2.setPaint(new Color(0, 72, 255));
+		g2.setPaint(currentHitbox.color);
         alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
         g2.setComposite(alcom);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
@@ -251,8 +280,13 @@ public class EnemyChampion extends GameObject{
 		distToOponent = Math.abs(this.x - player.x);
 		desiredDist = (float)(this.width * 1.5);
 		
+		if (orientation == LEFT) {
+			
+		}
 		
-		hurtBox.x = (x - (hurtBox.width/2)) + hurtBoxX;
+		
+		
+		hurtBox.x = (x - (hurtBox.width/2)) + hurtBoxX *(-movementFactor);
 		hurtBox.y = y + hurtBoxY;
 		
 		if (onFloor) {
@@ -268,9 +302,101 @@ public class EnemyChampion extends GameObject{
 	
 	void finalBehavior() {
 		
-		if (distToOponent > width*1.5) {
+		int direction = 1;
+	
+		
+		currentHitbox = new HitBox();
+		
+//		
+//		makeDecision();
+//		
+//		
+//		if (distToOponent > width * 1.5) {
+//			x+= movementFactor * speed;
+//		} 
+//		else if (attackCounter < 3){
+//			normalAttack();
+//			attackCounter++;
+//		} else {
+//			x-= movementFactor * speed;
+//		}
+//		
+		
+		System.out.println(waitingCounter);
+		
+		switch(aiState) {
+		
+		case RETREAT:
+			
+			x-= movementFactor * speed;
+			
+			if (distToOponent >= width * 3) {
+				aiState = WAIT;
+			}
+			
+			break;
+			
+		case PURSUE:
+			
 			x+= movementFactor * speed;
+			
+			if (distToOponent <= width) {
+				aiState = ATTACK;
+			}
+			
+			break;
+			
+		case ATTACK:
+			
+			normalAttack();
+			
+			attackCounter++;
+			
+			if(attackCounter > 4) {
+				
+				aiState = RETREAT;
+				attackCounter = 0;
+				
+			}
+			
+			
+			break;
+			
+		case WAIT:
+			
+			if (waitingCounter > 10) {
+				
+				waitingCounter = 0;
+				
+				if (distToOponent > width * 1.5) {
+					aiState = PURSUE;
+				}
+			}
+			
+			waitingCounter++;
+			
+			
+			
+			break;
+		
+		
 		}
+		
+		
+	}
+	
+	void makeDecision() {
+		
+		if (decisionTimer <= 0) {
+			decision = rng.nextInt(3);
+			decisionTimer = 10;
+		} else {
+			decisionTimer --;
+		}
+		
+		System.out.println(decisionTimer);
+		
+		
 		
 	}
 	
@@ -415,12 +541,23 @@ public class EnemyChampion extends GameObject{
 		}
 	
 	void normalAttack() {
+		
+		int offset = 45;
+		
+		int hitBoxWidth = 30;
+		int hitBoxHeigth = 20;
+		
+		
 		if (onFloor) {
 			currentSprite = sprites[EnemyChampion.ATAQUEBASICO_NORMAL].getScaledInstance(width, height, 0);
 		} else {
 			currentSprite = sprites[EnemyChampion.ATAQUEBASICO_SALTO].getScaledInstance(width, height, 0);
 		}
 		
+		
+		currentHitbox = new HitBox(x -(hitBoxWidth/2) + (offset * movementFactor) , y + 50, hitBoxHeigth, hitBoxWidth, Color.red);
+		
+	
 
 	}
 	
