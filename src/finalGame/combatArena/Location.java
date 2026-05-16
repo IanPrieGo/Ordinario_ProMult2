@@ -21,6 +21,8 @@ public class Location extends GameObject{
 	int height = 500;
 	int width = 0;
 	
+
+	
 	boolean key = true;
 	
 	String arena1Path = "src\\finalGame\\combatarena\\Arena1.png";
@@ -60,6 +62,8 @@ public class Location extends GameObject{
 		Image sprite = backgroundImage.getScaledInstance(width, height, 0);
 		
 		g2.drawImage(sprite, 0, 0, Color.red, null);
+		
+//		g2.dispose();
 		
 	}
 	

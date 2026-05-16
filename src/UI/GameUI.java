@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import finalGame.GamePanel;
 import finalGame.KeyHandler;
 import finalGame.champion.Champion;
+import finalGame.champion.EnemyChampion;
 import finalGame.combatArena.Location;
 import gamestates.Playing;
 
@@ -19,14 +20,14 @@ import java.io.IOException;
 public class GameUI{
 	
 	public Champion player;
-	public Champion enemy;
+	public EnemyChampion enemy;
 	public GamePanel gp;
 	public KeyHandler keyHan;
 	public Location arena;
 	public Playing play;
 	
 	int xWhy;
-	int yWhy=500;
+	int yWhy= 500;
 	int timerWidth = 25;
 	boolean timerKey = true;
 	boolean timerKey2 = true;
@@ -67,7 +68,7 @@ public class GameUI{
 	    newGame.setVisible(gameEnd());
 	}
 		
-	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, Champion enemy) {
+	public GameUI (GamePanel gp, KeyHandler keyH, Champion player, EnemyChampion enemy) {
 		this.gp = gp;
 		this.keyHan = keyH;
 		this.player=player;
@@ -76,7 +77,7 @@ public class GameUI{
 		yWhy = gp.screenHeight;
 		
 		player.health = 100;
-	    enemy.enemyHealth = 100;
+	    enemy.health = 100;
 	    
 		try {
 			bar = ImageIO.read( new File ("src\\Resourses\\SSSBackgrounds.png"));
@@ -97,6 +98,19 @@ public class GameUI{
 	}
 	
 	public void draw(Graphics2D g2) {
+		
+		
+		g2.setColor(Color.black);
+		g2.drawRect(110, 74, 176, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(110, 74, (int)(player.health * 1.8), 25);
+		//MasiosareHP
+		g2.setColor(Color.black);
+		g2.drawRect(478, 75, 180, 25);
+		g2.setColor(Color.red);
+		g2.fillRect(478, 75, (int)(enemy.health * 1.8), 25);
+		
+		
 		g2.setComposite(
 		        AlphaComposite.getInstance(
 		            AlphaComposite.SRC_OVER, 1.0f));
@@ -111,13 +125,15 @@ public class GameUI{
 		        (xWhy / 2) - timerWidth,
 		        90
 		    );
+		    
+		    
 
 		    if (player.health <= 0) {
 		        g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		        newGame.setVisible(true);
 		    }
 
-		    if (enemy.enemyHealth <= 0) {
+		    if (enemy.health <= 0) {
 		        g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		        newGame.setVisible(true);
 
@@ -125,17 +141,26 @@ public class GameUI{
 
 		    if (timer == 0) {
 
-		        if (player.health < enemy.enemyHealth) {
+		        if (player.health < enemy.health) {
 		            g2.drawImage(lose, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		            newGame.setVisible(true);
 
 		        }
 
-		        if (player.health > enemy.enemyHealth) {
+		        if (player.health > enemy.health) {
 		            g2.drawImage(win, (xWhy/2) - (resultScreenW/2), (yWhy/2) - (resultScreenH/2), resultScreenW, resultScreenH, null);
 		            newGame.setVisible(true);
 
 		        }
+		        
+		        
+		        
+		       
+				
+				
+				
+		        
+		        
 		    }
 //		    newGame.setVisible(gameEnd());
     }
@@ -144,7 +169,7 @@ public class GameUI{
 		if (player.health <= 0) {
 			return true;
         }
-        if (enemy.enemyHealth <= 0) {
+        if (enemy.health <= 0) {
         	return true;
         }
         if (timer == 0) {
@@ -160,7 +185,7 @@ public class GameUI{
 		        timerWidth = 25;
 
 		        player.health = 100;
-		        enemy.enemyHealth = 100;
+		        enemy.health = 100;
 
 		        player.x = 50;
 		        player.y = (int)(player.floorHeight - player.height);

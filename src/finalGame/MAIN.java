@@ -10,7 +10,7 @@ public class MAIN {
 	public static void main (String [] args) {
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setResizable(true) ;
+		window.setResizable(false) ;
 		window.setTitle("School Super Star");
 		window.setLocation(550, 150);
 		

@@ -40,6 +40,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public Playing playing = new Playing(this);
 	public GameMenu menu = new GameMenu(this);
+	public AiTesting aiTesting = new AiTesting(this);
 	
 	
 	
@@ -134,6 +135,9 @@ public class GamePanel extends JPanel implements Runnable{
 			break;
 		case PAUSE:
 			break;
+		case AI_TESTING:
+			this.aiTesting.update();
+			break;
 		default:
 			break;
 		
@@ -157,6 +161,9 @@ public class GamePanel extends JPanel implements Runnable{
 			playing.draw(g2);
 			break;
 		case PAUSE:
+			break;
+		case AI_TESTING:
+			this.aiTesting.draw(g2);
 			break;
 		default:
 			break;

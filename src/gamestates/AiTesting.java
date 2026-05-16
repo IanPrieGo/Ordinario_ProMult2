@@ -1,123 +1,87 @@
 package gamestates;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import UI.GameUI;
-import finalGame.GameMatch;
-import finalGame.GamePanel;
-import finalGame.MatchInfoDisplay;
-import finalGame.champion.Champion;
-import finalGame.champion.EnemyChampion;
-import finalGame.champion.HitBox;
+import java.awt.*;
+import java.awt.event.*;
+import finalGame.*;
+import finalGame.champion.*;
 import finalGame.combatArena.Location;
 
-public class Playing extends State implements Statemethot{
+public class AiTesting extends State implements Statemethot{
 	
-	public HitBox enemy;
-	public Champion player1;
-	public EnemyChampion enemy1;
-	public Location arena;
+	Champion player;
+	EnemyChampion enemy;
+	Location arena;
 	
-	public GameUI UIbar;
+	LocalCoordTest lct;
 	
-	public GameMatch gameMatch;
+	int player1StartingX = 50;
+	int player2StartingX = 500;
 	
-	boolean startKey = true;
-	
-	public Playing(GamePanel game) {
+	 public AiTesting(GamePanel game) {
 		super(game);
 		
-		//Hitbox del enemy para probar el sistema de colisiones
-		enemy = new HitBox(400, 400-250, 250, 100, Color.pink, HitBox.enemy); 
+		enemy = new EnemyChampion(game, game.keyH);
+		player = new Champion(game, game.keyH);
 		
-		//Instancia de la clase "Champion", para que el jugador controle
-		player1 = new Champion(game, game.keyH, enemy); 
-		System.out.println(game.keyH);
-//		Champion player1 = new Champion(this, keyH);
+		enemy.setEnemy(player);
+		player.setEnemy(enemy);
 		
-		enemy1 = new EnemyChampion(game, game.keyH);
+		enemy.x = this.player2StartingX;
+		player.x = this.player1StartingX;
 		
-		//Instancia de la clase "Location", que guarda la informacion de la arena de combate
+		lct = new LocalCoordTest(game, game.keyH);	
+		
+		
 		arena = new Location(game, game.keyH); 
 		
-		UIbar = new GameUI(game, game.keyH, player1, enemy1);
-		
-		gameMatch = new GameMatch();
-		
-		MatchInfoDisplay matchUI = new MatchInfoDisplay(); 
-			
-		//Varibale que guarda la salud del jugador para usarlo en la GUI o para saber cuando este sea derrotado
-		int healthPlayer1 = player1.health;
-		
-		
-		
-		enemy1.setEnemy(player1);
-		player1.setEnemy(enemy1);
-		
-		
-		
-		
 	}
-	
-		@Override
-		public void update() {
+
+	 @Override
+	 public void update() {
+		arena.update();
+		player.update();
+		enemy.update();
+		
+//		lct.update();
+		
+		
+	 }
+
+	 @Override
+	 public void draw(Graphics2D g2) {
+		 	arena.draw(g2);
+			player.draw(g2);
+			enemy.draw(g2);
 			
-			if(startKey) {
-//				this.intClasses();
-				startKey = false;
-			}
+//			lct.draw(g2);
 			
+			g2.dispose();
 			
-			arena.update();
-			player1.update();
-			enemy1.update();
-			UIbar.update();
-			
-		}
+	 }
 
+	 @Override
+	 public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	 }
 
-		@Override
-		public void draw(Graphics2D g2) {
-			g2.setColor(Color.RED);
-			g2.fillOval(game.screenWidth/2, game.screenHeight/2, 10, 10);
-			arena.draw(g2);
-			player1.draw(g2);
-			enemy1.draw(g2);
-			UIbar.draw(g2);
+	 @Override
+	 public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	 }
 
-			
-			
-		}
+	 @Override
+	 public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	 }
 
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			
-		}
-
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-
-		@Override
-		public void mouseMoved(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
+	 @Override
+	 public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	 }
 
 		@Override
 		public void keyPressed(KeyEvent e) {
@@ -228,14 +192,11 @@ public class Playing extends State implements Statemethot{
 			}
 			
 		} 
-		public Champion getChampion() {
-			return player1;
-		}
 
-		@Override
-		public void onStart() {
-//			this.intClasses();
-			
-		}
+	 @Override
+	 public void onStart() {
+		// TODO Auto-generated method stub
 		
+	 }
+
 }

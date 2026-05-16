@@ -28,24 +28,44 @@ public class Champion extends GameObject{
 	
 	
 	public int x = 50;
+
 	public int y = (int)(floorHeight - height);
 	
 	Image currentSprite;
 	BufferedImage [] sprites;
+	int currentSpriteIndex = 1;
 	int spriteCounter = 0;
 	boolean spriteKey = true;
+	boolean staticAnimation = false;
 	
 	HitBox championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
 	HitBox currentHitbox = new HitBox();
 	
 	HitBox hitBoxMask;
-	Champion enemy;
+	EnemyChampion enemy;
 	
 	public int health = 0;
 	public int enemyHealth = 100;
 	
+	boolean isAttacking;
+	boolean isBlocking;
 	
 	String resourceFolder = "src\\finalGame\\champion\\champion_RES";
+	
+	//Orientation Constants
+	final boolean FACING_LEFT = true;
+	final boolean FACING_RIGHT =  false;
+	
+	//Sprite Index Constants
+	final int SPRITE_IDLE = 1;
+	final int SPRITE_ATAQUE_ESPECIAL = 3;
+	final int SPRITE_ATAQUE_NORMAL = 5;
+	final int SPRITE_BLOQUEO = 9;
+	
+	
+	
+	
+	
 	
 	// Variables sin Utilizar
 	String NAME;
@@ -55,10 +75,10 @@ public class Champion extends GameObject{
 	boolean attackLanded;
 	boolean ultReady;
 	int ultCharge;
+
+	private boolean justAttacked;
 	
-	boolean isBlocking;
-	boolean isAttacking;
-	
+
 	
 	public Champion(GamePanel gp, KeyHandler keyH, HitBox hitBoxMask) {
 		super(gp, keyH);
@@ -66,15 +86,19 @@ public class Champion extends GameObject{
 		this.hitBoxMask = hitBoxMask;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
-	public Champion(GamePanel gp, KeyHandler keyH, Champion enemy) {
+	public Champion(GamePanel gp, KeyHandler keyH, EnemyChampion enemy) {
 		super(gp, keyH);
 		
-		this.hitBoxMask = enemy.championBox;
+		this.hitBoxMask = enemy.hurtBox;
 		this.enemy = enemy;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	public Champion(GamePanel gps, KeyHandler keyHs) {
@@ -85,6 +109,8 @@ public class Champion extends GameObject{
 //		this.hitBoxMask = enemy.championBox;
 		
 		getPlayerSprite();
+		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+
 	}
 	
 	
@@ -108,7 +134,11 @@ public class Champion extends GameObject{
 				resourceFolder + "\\DumSprites_AtaqueBajo_Salto.png",
 				// Ataque Bajo Normal [7]
 				resourceFolder + "\\DumSprites_AtaqueBajo_Normal.png",
-				// Arnold [8]
+				// Bloque Salto [8]
+				resourceFolder + "\\DumSprites_Bloqueo_Salto.png",
+				// Bloqueo Normal [9]
+				resourceFolder + "\\DumSprites_Bloqueo_Normal.png",
+				// Arnold [10]
 				resourceFolder + "\\ArnoldGuapo.png"
 		};
 		
@@ -127,11 +157,19 @@ public class Champion extends GameObject{
 		}
 	}
 	
-	public void update() {
+	public void setEnemy(EnemyChampion champion) {
 		
-		movementManager();
+		this.enemy = champion;
+		this.hitBoxMask = champion.hurtBox;
+		
+	}
+	
+	public void update() {
+			
 		actionManager();
-		spriteManager();
+		animationPlayer();
+				
+
 //		System.out.println(spriteCounter);
 //		System.out.println("Attack Key Pressed: " + keyHan.attackKeyPressed);
 //		System.out.println("Sprite Key: " + spriteKey);aw
@@ -146,84 +184,25 @@ public class Champion extends GameObject{
 		
 		
 		
-		g2.drawImage(currentSprite, x, y, Color.red, null);
-		g2.setPaint(new Color(0, 72, 255));
+		g2.drawImage(currentSprite, x, y, null);
+		
         AlphaComposite alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
         g2.setComposite(alcom);
+        
+        g2.setPaint(new Color(0, 72, 255));
 		g2.fillRect(championBox.x, championBox.y, championBox.width, championBox.height);
-		g2.setColor(currentHitbox.color);
+		
+		g2.setPaint(Color.red);
 		g2.fillRect(currentHitbox.x, currentHitbox.y, currentHitbox.width, currentHitbox.height);
 		
 		//PlayerHP
-		g2.setColor(Color.black);
-		g2.drawRect(110, 74, 176, 25);
-		g2.setColor(Color.red);
-		g2.fillRect(110, 74, health + 76, 25);
-		//MasiosareHP
-		g2.setColor(Color.black);
-		g2.drawRect(478, 75, 180, 25);
-		g2.setColor(Color.red);
-		g2.fillRect(478, 75, enemyHealth + 80, 25);
+		
+		
+//		g2.dispose();
 		
 	}
 	
-	void spriteManager() {
-		
-		if (spriteCounter > 0) {
-			spriteCounter -=2;
-		} 
 
-		if (keyHan.attackKeyPressed && spriteKey) {
-			spriteCounter = 12; 
-			spriteKey = false;
-		}
-		
-		if (!keyHan.attackKeyPressed) {
-			spriteKey = true;
-		}
-		
-		if (onFloor) {
-			currentSprite = sprites[1].getScaledInstance(width, height, 0);
-			
-			if (spriteCounter > 0) {
-				if(keyHan.highAtk) { //ACTION EXECUTIONER
-					currentSprite = sprites[3].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.basicAtk) {
-					currentSprite = sprites[5].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.lowAtk) {
-					currentSprite = sprites[7].getScaledInstance(width, height, 0);
-				}
-				isAttacking = true;
-			}
-			if(keyHan.longAtk) {
-				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-			}
-			
-		} else {
-			currentSprite = sprites[0].getScaledInstance(width, height, 0);
-			
-			if (spriteCounter > 0) {
-				if(keyHan.highAtk) { //ACTION EXECUTIONER
-					currentSprite = sprites[2].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.basicAtk) {
-					currentSprite = sprites[4].getScaledInstance(width, height, 0);
-				}
-				if(keyHan.lowAtk) {
-					currentSprite = sprites[6].getScaledInstance(width, height, 0);
-				}
-				isAttacking = true;
-			}
-			if(keyHan.longAtk) {
-				currentSprite = sprites[8].getScaledInstance(width, height, 0);
-			}
-		}
-
-
-		
-	}
 	void movementManager() {
 		//MOVMENT MANAGER
 		if (y < (floorHeight - height)) {
@@ -256,41 +235,136 @@ public class Champion extends GameObject{
 			
 			jumpStrength = 0;
 		}
+		
+		
+		championBox.x = x + 7;
+		championBox.y = y + 10;
+		
+		
+		
 	}
+	
+
 	
 	void actionManager() {
 		
-		championBox = new HitBox(x + 7, y + 10, ((rawHeight - 55)/scale), ((rawWidth - 150)/scale), Color.yellow, HitBox.player);
+		movementManager();
 		
-		if (keyHan.basicAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
+		System.out.println(keyHan.normalAttack);
+		
+		
+		if (keyHan.normalAttack) {
 			
-		} else if (keyHan.highAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + 85, y + 10, 30, 20, Color.red);
+			normalAttack();
+			playAnimation(SPRITE_ATAQUE_NORMAL);
 			
-		} else if (keyHan.lowAtk && spriteCounter > 9) {
-			currentHitbox = new HitBox(x + 82, y + 95, 27, 27, Color.red);
+		}
+		
+		if (keyHan.block) {
+			
+			isBlocking = true;
+			playAnimation(SPRITE_BLOQUEO);
 			
 		} else {
+			isBlocking = false;
+		}
+
+		
+		if (keyHan.specialAttack) {
+			
+			specialAttack();
+			playAnimation(SPRITE_ATAQUE_ESPECIAL);
+			
+		}
+		
+		if (spriteCounter <= 9) {
 			currentHitbox = new HitBox();
 		}
 		
+		checkAttackCollision();
+		
+		
+	}
+	
+
+
+	void animationPlayer(){
+		
+		if (spriteCounter > 0) {
+			spriteCounter -=2;
+		} 
+
+		if (!keyHan.attackKeyPressed) {
+			spriteKey = true;
+			staticAnimation = false;
+		}
+		
+		if (spriteCounter <= 0 && staticAnimation != true) {
+			
+			if (onFloor) {
+				currentSprite = sprites[SPRITE_IDLE].getScaledInstance(width, height, 0);
+			} else {
+				currentSprite = sprites[SPRITE_IDLE - 1].getScaledInstance(width, height, 0);
+
+			}
+			
+		}
+		
+		
+		
+	}
+	
+	void playAnimation(int spriteIndex) {
+		
+		if (!onFloor) {
+			spriteIndex -=1;
+		}
+		
+		if (spriteKey) {
+			
+			if (spriteIndex == SPRITE_BLOQUEO) {
+				currentSprite = sprites[spriteIndex].getScaledInstance(width, height, 0);
+				staticAnimation = true;
+				
+			} else {
+				currentSprite = sprites[spriteIndex].getScaledInstance(width, height, 0);
+				spriteCounter = 10;
+				spriteKey = false;
+				currentSpriteIndex = spriteIndex;
+			}
+			
+			
+			
+		
+		}
+	}
+	
+	void checkAttackCollision() {
 		if (currentHitbox.intersects(hitBoxMask)) {
 			
 			System.out.println("HitDetected");
 			
-			if (keyHan.basicAtk) {
-				enemyHealth -= power;
-			}
-			if (keyHan.highAtk) {
-				enemyHealth -= power * 3;
-			}
-			if (keyHan.lowAtk) {
-				enemyHealth -= power * 2;
-			}
+			enemy.health -= 10;
 			
-		}	
-		
+			
+			
+		}
+	}
+	
+	
+	void normalAttack() {
+		currentHitbox = new HitBox(x + width -30, y + 50, 20, 30, Color.red);
+			
+	}
+	
+	void block() {
+		isBlocking = true;
+				
+	}
+
+	void specialAttack() {
+		currentHitbox = new HitBox(x + 85, y + 10, 30, 20, Color.red);
+				
 	}
 
 //	void setConfiguration() {
@@ -301,9 +375,7 @@ public class Champion extends GameObject{
 //		
 //	}
 //	
-	void normalAttack() {
-		
-	}
+
 //	
 //	void lowAttack() {
 //		
@@ -327,15 +399,14 @@ public class Champion extends GameObject{
 	
 //	boolean getOrientation() {
 //		
-//		boolean orientation = true;
 //		
-//		if (keyH.rightPressed) {
-//			orientation = true;
-//		} else if (keyH.leftPressed){
-//			orientation = false;
+//		if (keyHan.rightPressed) {
+//			return FACING_RIGHT;
+//		} else if (keyHan.leftPressed){
+//			return FACING_LEFT;
 //		}
+//		return (Boolean) null;
 //		
-//		return orientation;
 //	}
 
 }
